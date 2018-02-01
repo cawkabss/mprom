@@ -16,14 +16,15 @@
   },
   "dependencies": {
     "body-parser": "~1.18.2",
+    "cheerio": "^1.0.0-rc.2",
     "connect-busboy": "0.0.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
+    "exceljs": "^0.7.1",
     "express": "~4.15.5",
-    "cheerio": "^1.0.0-rc.2",
     "mongoose": "^5.0.1",
     "morgan": "~1.9.0",
-    "exceljs": "^0.7.1",
+    "nconf": "^0.10.0",
     "needle": "^2.0.1"
   }
 }

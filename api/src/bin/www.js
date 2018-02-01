@@ -17,7 +17,7 @@ const debug = require('debug')('app:server');
  */
 
 const port = config.get('port');
-app.set('port', port);
+app.set('port', process.env.PORT || port);
 
 /**
  * Create HTTP server.

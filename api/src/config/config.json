@@ -1,0 +1,9 @@
+{
+  "port": "3001",
+  "mongoose": {
+    "uri": "mongodb://cawka:q19920412@ds215208.mlab.com:15208/mprom",
+    "options": {
+      "keepAlive": 1, "connectTimeoutMS": 30000
+    }
+  }
+}

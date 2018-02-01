@@ -1,0 +1,19 @@
+{
+  "name": "mprom",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {},
+  "scripts": {
+    "dev": "concurrently \"npm run start-client-dev\" \"npm run start-api-dev\"",
+    "start-client-dev": "cd client && npm run start-dev",
+    "start-api-dev": "cd api && npm run serve-dev",
+    "install": "cd client && npm run build-prod && cd ../api && npm run build-prod",
+    "start": "set NODE_ENV=production && node api/dist/bin/www.js"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1"
+  },
+  "engines": {
+    "node": "6.11.1"
+  }
+}

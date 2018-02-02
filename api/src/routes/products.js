@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.get('/', (req, res, next) => {
     Product.find()
+        .populate('provider')
         .then(providers => res.send(providers))
         .catch(err => next(err));
 });
@@ -17,13 +18,16 @@ router.get('/find', (req, res, next) => {
 
     if (query === 'all') {
         Product.find()
+            .populate('provider')
             .then(providers => res.send(providers))
             .catch(err => next(err));
     }
+
     else {
         Product.find({vendorCode: {$regex : `${query}`, $options: "i"}})
+            .populate('provider')
             .then(providers => res.send(providers))
-            .catch(err => console.log(err));
+            .catch(err => next(err));
     }
 });
 

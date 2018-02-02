@@ -10,7 +10,7 @@ import {
     IconButton,
     Typography,
     Tooltip,
-    withStyles
+    withStyles, Icon
 } from "material-ui-next";
 import {green} from 'material-ui-next/colors';
 import classNames from 'classnames';
@@ -98,16 +98,18 @@ class FinedProductItem extends Component {
                     </Carousel>
                     <Tooltip placement="top-start" title="Выбрать">
                         <IconButton
-                            className={classNames(
-                                'material-icons',
-                                classes.addButton,
-                                classes.addButtonGallery,
-                                showAddBtn ? classes.addButton : classes.hidden
+                            className={
+                                classNames(
+                                    classes.addButton,
+                                    classes.addButtonGallery,
+                                    showAddBtn ? classes.addButton : classes.hidden
                             )}
                             aria-label="Choose!"
                             onClick={() => chooseProductPart('images', images)}
                         >
-                            add_circle
+                            <Icon className="material-icons">
+                                add_circle
+                            </Icon>
                         </IconButton>
                     </Tooltip>
                 </div>
@@ -128,15 +130,17 @@ class FinedProductItem extends Component {
                         </Typography>
                         <a href={category.url}>{category.name}</a>
                         <IconButton
-                            className={classNames(
-                                'material-icons',
-                                classes.addButton,
-                                showAddBtn ? classes.addButton : classes.hidden
+                            className={
+                                classNames(
+                                    classes.addButton,
+                                    showAddBtn ? classes.addButton : classes.hidden
                             )}
                             aria-label="Choose!"
                             onClick={() => chooseProductPart('category', category)}
                         >
-                            add_circle
+                            <Icon className="material-icons">
+                                add_circle
+                            </Icon>
                         </IconButton>
                     </div>
                     <hr/>
@@ -150,15 +154,17 @@ class FinedProductItem extends Component {
 
                             </Typography>
                             <IconButton
-                                className={classNames(
-                                    'material-icons',
-                                    classes.addButton,
-                                    showAddBtn ? classes.addButton : classes.hidden
+                                className={
+                                    classNames(
+                                        classes.addButton,
+                                        showAddBtn ? classes.addButton : classes.hidden
                                 )}
                                 aria-label="Choose!"
                                 onClick={() => chooseProductPart('description', description)}
                             >
-                                add_circle
+                                <Icon className="material-icons">
+                                    add_circle
+                                </Icon>
                             </IconButton>
                         </div>
                         <div hidden={description}>
@@ -173,15 +179,17 @@ class FinedProductItem extends Component {
 
                         <div hidden={!properties.length}>
                             <IconButton
-                                className={classNames(
-                                    'material-icons',
-                                    classes.addButton,
-                                    showAddBtn ? classes.addButton : classes.hidden
+                                className={
+                                    classNames(
+                                        classes.addButton,
+                                        showAddBtn ? classes.addButton : classes.hidden
                                 )}
                                 aria-label="Choose!"
                                 onClick={() => chooseProductPart('properties', properties)}
                             >
-                                add_circle
+                                <Icon className="material-icons">
+                                    add_circle
+                                </Icon>
                             </IconButton>
                             <ul>
                                 {properties.map((prop, index) => {
@@ -206,16 +214,17 @@ class FinedProductItem extends Component {
                             Ключевые слова:
                         </Typography>
                         <div hidden={!keywords}>
-                            <IconButton
-                                className={classNames(
-                                    'material-icons',
+                            <IconButton className={
+                                classNames(
                                     classes.addButton,
                                     showAddBtn ? classes.addButton : classes.hidden
                                 )}
                                 aria-label="Choose!"
                                 onClick={() => chooseProductPart('keywords', keywords)}
                             >
-                                add_circle
+                                <Icon className="material-icons">
+                                    add_circle
+                                </Icon>
                             </IconButton>
                             <Typography>
                                 {keywords}

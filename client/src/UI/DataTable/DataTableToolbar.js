@@ -5,6 +5,7 @@ import Typography from 'material-ui-next/Typography';
 import IconButton from 'material-ui-next/IconButton';
 import Tooltip from 'material-ui-next/Tooltip';
 import classNames from 'classnames';
+import {Icon} from "material-ui-next";
 
 const toolbarStyles = theme => ({
     root: {
@@ -50,13 +51,17 @@ let DataTableToolbar = (props) => {
                         return (
                             <Tooltip key={i} title={action.tooltip}>
                                 <IconButton
-                                    iconclassname="material-icons"
                                     style={{color: action.iconColor ? action.iconColor : 'inherit'}}
                                     onClick={() => {
                                         onActionClick();
                                         action.handleClick(selected);
                                     }}>
-                                    {action.icon}
+                                    <Icon
+                                        className="material-icons"
+                                        aria-label="Menu"
+                                    >
+                                        {action.icon}
+                                    </Icon>
                                 </IconButton>
                             </Tooltip>
                         )
@@ -65,13 +70,17 @@ let DataTableToolbar = (props) => {
                         return (
                             <Tooltip>
                                 <IconButton
-                                    iconclassname="material-icons"
                                     style={{color: action.iconColor ? action.iconColor : 'inherit'}}
                                     onClick={() => {
                                         onActionClick();
                                         action.handleClick();
                                     }}>
-                                    {action.icon}
+                                    <Icon
+                                        className="material-icons"
+                                        aria-label="Menu"
+                                    >
+                                        {action.icon}
+                                    </Icon>
                                 </IconButton>
                             </Tooltip>
                         )

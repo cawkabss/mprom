@@ -10,7 +10,7 @@ import {
     Radio,
     RadioGroup,
     TextField,
-    withStyles
+    withStyles, Icon
 } from "material-ui-next";
 import {grey} from 'material-ui-next/colors';
 import classNames from 'classnames';
@@ -80,7 +80,8 @@ class Settings extends Component {
     searchHandler = () => {
         const {resultProduct, settings: {parseQuery, maxCount, timeOut}} = this.props;
 
-        this.props.search(resultProduct[parseQuery], maxCount, timeOut)
+        this.props.search(resultProduct[parseQuery], maxCount, timeOut);
+        this.props.toggleSettings();
     };
 
     render() {
@@ -143,9 +144,10 @@ class Settings extends Component {
 
                     <IconButton
                         onClick={toggleSettings}
-                        className={classNames('material-icons', classes.closeBtn)}
-                    >
-                        clear
+                        className={classes.closeBtn}>
+                        <Icon className="material-icons">
+                            clear
+                        </Icon>
                     </IconButton>
                 </form>
             </Paper>

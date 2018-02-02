@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router';
 import {
     Step,
     Stepper,
@@ -46,10 +47,10 @@ class Captcha extends Component {
             localStorage.setItem('cookie', this.state.cookie);
 
             const {parseQuery, maxCount} = this.props.settings;
-
-            const query = this.props.searchingProduct[parseQuery];
+            const query = this.props.result[parseQuery];
 
             this.props.search(query, maxCount);
+            this.props.history.goBack();
         }
 
         this.setState({
@@ -117,6 +118,7 @@ class Captcha extends Component {
                             9. Вставьте скопированное значение в поле ниже.
                         </Typography>
                         <TextField
+                            fullWidth
                             onChange={this.setCookieHandler}
                             value={this.state.cookie}
                             placeholder="Вставьте Cookie"/>
@@ -130,6 +132,12 @@ class Captcha extends Component {
 
     render() {
         const {stepIndex} = this.state;
+
+        let canNext = true;
+
+        if (stepIndex === 1) {
+            canNext = this.state.cookie.length;
+        }
 
         return (
             <div style={styles.root}>
@@ -154,6 +162,7 @@ class Captcha extends Component {
                         <Button
                             color="primary"
                             onClick={this.handleNext}
+                            disabled={!canNext}
                         >
                             {stepIndex === 1 ? 'Готово' : 'Дальше'}
                         </Button>
@@ -167,7 +176,7 @@ class Captcha extends Component {
 const mapStateToProps = state => (
     {
         settings: state.search.settings,
-        searchingProduct: state.search.searchingProduct
+        result: state.search.resultProduct
     }
 );
 
@@ -177,4 +186,4 @@ const mapDispatchToProps = dispatch => (
     }
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Captcha);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Captcha));

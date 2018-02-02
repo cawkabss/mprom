@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
 import {NavLink} from 'react-router-dom';
-import withStyles from "material-ui-next/styles/withStyles";
-import AppBar from "material-ui-next/AppBar";
-import Toolbar from "material-ui-next/Toolbar";
-import IconButton from "material-ui-next/IconButton";
-import Typography from "material-ui-next/Typography";
-import Drawer from "material-ui-next/Drawer";
-import Hidden from "material-ui-next/Hidden";
+import {
+    AppBar,
+    Toolbar,
+    Typography,
+    Drawer,
+    Hidden,
+    Icon,
+    withStyles, IconButton
+} from "material-ui-next";
 
 import Navigation from "./Navigation";
+
 
 const styles = {
     root: {
@@ -65,10 +68,14 @@ class Header extends Component {
                         </div>
                         <Hidden mdUp>
                             <IconButton
-                                onClick={this.toggleDrawer}
-                                iconclassname="material-icons"
-                                color="inherit" aria-label="Menu">
-                                menu
+                                color="inherit"
+                                onClick={this.toggleDrawer}>
+                                <Icon
+                                    className="material-icons"
+                                    aria-label="Menu"
+                                >
+                                    menu
+                                </Icon>
                             </IconButton>
                         </Hidden>
                         <Hidden mdDown>

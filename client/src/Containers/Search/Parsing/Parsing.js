@@ -10,11 +10,10 @@ import {
     DialogContent,
     Typography,
     DialogActions,
-    Button
+    Button, Icon
 } from "material-ui-next";
 import {orange} from 'material-ui-next/colors';
 import {Sticky, StickyContainer} from "react-sticky";
-import classNames from 'classnames';
 
 import ResultProduct from "./ResultProduct";
 import FinedProductsList from '../FinedProductsList/FinedProductList';
@@ -103,9 +102,11 @@ class Parsing extends Component {
                 <Tooltip title="Изменить параметры парсинга" placement="top-start">
                     <IconButton
                         onClick={this.toggleSettings}
-                        className={classNames('material-icons', classes.settingsButton)}
+                        className={classes.settingsButton}
                     >
-                        settings
+                        <Icon className="material-icons">
+                            settings
+                        </Icon>
                     </IconButton>
                 </Tooltip>
 

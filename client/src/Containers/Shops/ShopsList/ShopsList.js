@@ -25,7 +25,7 @@ class ShopsList extends Component{
     };
 
     render() {
-        const {shopLoad, providersLoad, shopsList, classes} = this.props;
+        const {loading, shopsList, classes} = this.props;
 
         return (
 
@@ -48,7 +48,7 @@ class ShopsList extends Component{
                     }
                 </Grid>
 
-                <Progress show={shopLoad || providersLoad} />
+                <Progress show={loading} />
             </section>
         )
     }
@@ -56,7 +56,8 @@ class ShopsList extends Component{
 
 const mapStateToProps = (state) => {
     return {
-        shopsList: state.shops.shopsList
+        shopsList: state.shops.shopsList,
+        loading: state.shops.loading
     }
 };
 

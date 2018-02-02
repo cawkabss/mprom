@@ -6,7 +6,7 @@ import {
     DialogContent,
     DialogActions,
     withMobileDialog,
-    withStyles
+    withStyles, Typography
 } from "material-ui-next";
 
 import ProductsHeader from "./ProductsHeader";
@@ -138,7 +138,9 @@ class Products extends Component{
         return (
             <section className={classes.root}>
                 <ProductsHeader className={classes.margin}/>
-
+                <Typography>
+                    *Для просмотра детальной информации или оформлении заказа сделайте двойной клик мышкой на товаре.
+                </Typography>
                 <DataTable
                     columns={TABLE_COLUMNS}
                     data={transformedProducts}

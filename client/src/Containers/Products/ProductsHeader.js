@@ -76,7 +76,7 @@ class ProductsHeader extends Component {
                         fullWidth
                         error={this.state.error}
                         id="product-search"
-                        placeholder="Введите артикул товара или 'all'"
+                        placeholder="Введите артикул товара или слово 'all'"
                         className={classes.input}
                         value={this.state.query}
                         onChange={ this.inputChangeHandler }

@@ -22,6 +22,7 @@
     "react-sticky": "^6.0.1",
     "react-tap-event-plugin": "^3.0.2",
     "recharts": "^1.0.0-beta.9",
+    "recompose": "^0.26.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0"
   },

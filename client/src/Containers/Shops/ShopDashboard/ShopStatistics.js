@@ -34,6 +34,22 @@ class ShopStatistics extends Component {
 
     render() {
         const {productsCount, ordersCount, loading, classes} = this.props;
+
+        const infoCardsData = [
+            {
+                icon: 'view_carousel',
+                color: yellow[600],
+                title: "Всех товаров",
+                value: productsCount
+            },
+            {
+                icon: 'shopping_basket',
+                color: purple[600],
+                title: "Количество заказов",
+                value: ordersCount
+            }
+        ];
+
         return (
             <Wrapper>
                 <Paper className={classes.paper}>
@@ -41,18 +57,16 @@ class ShopStatistics extends Component {
                         Статистика
                     </Typography>
                     <Grid container spacing={24}>
-                        <Grid item xs={12} sm={6} md={4}>
-                            <InfoCard icon={'view_carousel'}
-                                      color={yellow[600]}
-                                      title="Всех товаров"
-                                      value={productsCount}/>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4}>
-                            <InfoCard icon={'shopping_basket'}
-                                      color={purple[600]}
-                                      title="Количество заказов"
-                                      value={ordersCount}/>
-                        </Grid>
+                        {
+                            infoCardsData.map(item => (
+                                <Grid item xs={12} sm={6} md={4}>
+                                    <InfoCard icon={item.icon}
+                                              color={item.color}
+                                              title={item.title}
+                                              value={item.value}/>
+                                </Grid>
+                            ))
+                        }
                     </Grid>
                 </Paper>
 

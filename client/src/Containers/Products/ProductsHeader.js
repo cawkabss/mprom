@@ -5,6 +5,7 @@ import {Paper, Button, withStyles, TextField} from "material-ui-next";
 import classNames from 'classnames';
 
 import {loadProductsList} from "../../store/actions/products/actions";
+import {compose} from "recompose";
 
 const styles = {
     root:{
@@ -44,7 +45,6 @@ class ProductsHeader extends Component {
 
     inputChangeHandler = (e) => {
         const query = e.target.value;
-
         this.setState({query});
     };
 
@@ -69,6 +69,7 @@ class ProductsHeader extends Component {
 
     render() {
         const {classes, className} = this.props;
+
         return (
             <Paper className={classNames(classes.root, className)}>
                 <form className={classes.form} onSubmit={this.searchHandler}>
@@ -95,7 +96,6 @@ class ProductsHeader extends Component {
 }
 
 const mapStateToProps = state => {
-
     return {
         productsList: state.products.productsList
     }
@@ -107,4 +107,10 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProductsHeader)));
+const enhance = compose(
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps),
+    withStyles(styles)
+);
+
+export default enhance(ProductsHeader);

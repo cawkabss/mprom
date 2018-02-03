@@ -11,48 +11,27 @@ const initialState = {
 const ordersReducer = (state = initialState, action) => {
     switch(action.type){
 
-        case actionTypes.ORDERS_GET_STATISTICS_YEAR_START:
+        case actionTypes.ORDERS_STATISTICS_LOAD_START:
             return {
                 ...state,
                 loading: true
             };
 
-        case actionTypes.ORDERS_GET_STATISTICS_YEAR_SUCCESS:
+        case actionTypes.ORDERS_STATISTICS_LOAD_SUCCESS:
             return {
                 ...state,
-                ordersByLastYear: action.payload,
+                ordersByLastYear: action.payload[0].data,
+                ordersByLastMonth: action.payload[1].data,
                 loading: false,
                 error: false
             };
 
-        case actionTypes.ORDERS_GET_STATISTICS_YEAR_FAIL:
+        case actionTypes.ORDERS_STATISTICS_LOAD_FAIL:
             return {
                 ...state,
                 loading: false,
                 error: action.payload
             };
-
-        case actionTypes.ORDERS_GET_STATISTICS_MONTH_START:
-            return {
-                ...state,
-                loading: true
-            };
-
-        case actionTypes.ORDERS_GET_STATISTICS_MONTH_SUCCESS:
-            return {
-                ...state,
-                ordersByLastMonth: action.payload,
-                loading: false,
-                error: false
-            };
-
-        case actionTypes.ORDERS_GET_STATISTICS_MONTH_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-
 
         case actionTypes.ORDERS_LIST_LOAD_START:
             return {
@@ -85,7 +64,7 @@ const ordersReducer = (state = initialState, action) => {
             return {
                 ...state,
                 filteredOrders: state.filteredOrders.map(order => {
-                    const index = action.payload.findIndex(i => i._id === order._id);
+                    const index = action.payload.findIndex(uOrder => uOrder._id === order._id);
 
                     return index > -1 ? action.payload[index] : order;
                 }),

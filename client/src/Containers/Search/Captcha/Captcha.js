@@ -132,7 +132,6 @@ class Captcha extends Component {
 
     render() {
         const {stepIndex} = this.state;
-
         let canNext = true;
 
         if (stepIndex === 1) {

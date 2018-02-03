@@ -33,7 +33,7 @@ class OrdersDashboard extends Component{
         this.props.clearOrdersList();
     }
 
-    triggerStatisticsHandler = () => {
+    toggleStatisticsHandler = () => {
         this.setState(prevState => {
             return {
                 ...prevState,
@@ -52,7 +52,7 @@ class OrdersDashboard extends Component{
 
                 <div className={classes.margin}>
                     <Button
-                        onClick={this.triggerStatisticsHandler}
+                        onClick={this.toggleStatisticsHandler}
                         fullWidth={true}
                     >
                         Статистика
@@ -61,7 +61,7 @@ class OrdersDashboard extends Component{
                         </Icon>
                     </Button>
                     <Collapse in={this.state.showStatistics}>
-                        <OrdersStatistics filteredOrders={filteredOrders} />
+                        <OrdersStatistics />
                     </Collapse>
                 </div>
                 <OrdersTable

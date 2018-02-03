@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {branch, compose} from "recompose";
 import {connect} from 'react-redux';
 import {ValidatorForm} from "react-form-validator-core";
 import {TextValidator} from "react-material-ui-form-validator";
@@ -6,7 +7,14 @@ import {
     Paper,
     Typography,
     Button,
-    withStyles, Dialog, DialogTitle, DialogContent, DialogActions, Select, Input, MenuItem,
+    withStyles,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Select,
+    Input,
+    MenuItem,
 } from "material-ui-next";
 
 import Progress from "../../../UI/Progress/Progress";
@@ -107,7 +115,7 @@ class OrderForm extends Component {
         providerId: null
     };
 
-    componentWillMount() {
+    componentDidMount() {
         const params = new URLSearchParams(this.props.location.search);
         const productId = params.get('product');
 
@@ -359,4 +367,9 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(OrderForm));
+const enhance = compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    withStyles(styles),
+);
+
+export default enhance(OrderForm);

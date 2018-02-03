@@ -7,16 +7,16 @@ const style = {
     margin: '15px 0'
 };
 
-const layout = props => {
+const Layout = props => {
 
     return (
         <Wrapper>
             <Header/>
-            <main style={style} className="cf">
+            <main style={style}>
                 {props.children}
             </main>
         </Wrapper>
     )
 };
 
-export default layout;
+export default Layout;

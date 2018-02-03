@@ -5,7 +5,7 @@ import * as actionTypes from './actionTypes';
 
 const requestStart = (actionType) => {
     return {
-        type: actionType,
+        type: actionType
     }
 };
 
@@ -98,30 +98,16 @@ export const getOrdersList = (settings) => {
     }
 };
 
-export const getStatisticsByYear = () => {
+export const getOrdersStatistics = () => {
     return dispatch => {
-        dispatch(requestStart(actionTypes.ORDERS_GET_STATISTICS_YEAR_START));
+        dispatch(requestStart(actionTypes.ORDERS_STATISTICS_LOAD_START));
 
-        axios.get('/api/orders/statistics/year')
-            .then(res => dispatch(requestResponse(actionTypes.ORDERS_GET_STATISTICS_YEAR_SUCCESS, res.data)))
-            .catch(error => dispatch(requestResponse(actionTypes.ORDERS_GET_STATISTICS_YEAR_FAIL, error)))
-    }
-};
-
-export const getStatisticsByMonth = () => {
-    return dispatch => {
-        dispatch(requestStart(actionTypes.ORDERS_GET_STATISTICS_MONTH_START));
-
-        axios.get('/api/orders/statistics/month')
-            .then(res => dispatch(requestResponse(actionTypes.ORDERS_GET_STATISTICS_MONTH_SUCCESS, res.data)))
-            .catch(error => dispatch(requestResponse(actionTypes.ORDERS_GET_STATISTICS_MONTH_FAIL, error)))
-    }
-};
-
-export const changeFilterSettings = (newSettings) => {
-    return {
-        type: actionTypes.ORDERS_LIST_CHANGE_FILTER,
-        newSettings
+        Promise.all([
+            axios.get('/api/orders/statistics/year'),
+            axios.get('/api/orders/statistics/month')
+        ])
+            .then(res =>  dispatch(requestResponse(actionTypes.ORDERS_STATISTICS_LOAD_SUCCESS, res)))
+            .catch(error => dispatch(requestResponse(actionTypes.ORDERS_STATISTICS_LOAD_FAIL, error)))
     }
 };
 

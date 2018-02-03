@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {NavLink} from 'react-router-dom';
+import {withState, compose} from 'recompose';
 import {
     AppBar,
     Toolbar,
@@ -40,68 +41,57 @@ const styles = {
 };
 
 
-class Header extends Component {
-    state = {
-        openDrawer: false
-    };
-
-    toggleDrawer = () => {
-        this.setState(prevState => {
-            return {
-                openDrawer: !prevState.openDrawer
-            }
-        })
-    };
-
-    render() {
-        const {classes} = this.props;
-        return (
-            <header className={classes.root}>
-                <AppBar position="static">
-                    <Toolbar className={classes.toolbar}>
-                        <div className={classes.flex}>
-                            <NavLink to="/" className={classes.link}>
-                                <Typography type="title" className={classes.title}>
-                                    MProm
-                                </Typography>
-                            </NavLink>
-                        </div>
-                        <Hidden mdUp>
-                            <IconButton
-                                color="inherit"
-                                onClick={this.toggleDrawer}>
-                                <Icon
-                                    className="material-icons"
-                                    aria-label="Menu"
-                                >
-                                    menu
-                                </Icon>
-                            </IconButton>
-                        </Hidden>
-                        <Hidden mdDown>
-                            <Navigation/>
-                        </Hidden>
-                    </Toolbar>
-                </AppBar>
-                <Drawer
-                    classes={{
-                        paperAnchorRight: classes.paperAnchorRight
-                    }}
-                    anchor="right"
-                    open={this.state.openDrawer}
-                    onClose={this.toggleDrawer}>
-                    <div
-                        tabIndex={0}
-                        role="button"
-                        onClick={this.toggleDrawer}
-                        onKeyDown={this.toggleDrawer}
-                    >
-                        <Navigation/>
+const Header = ({showDrawer, toggleDrawer, classes}) => {
+    return (
+        <header className={classes.root}>
+            <AppBar position="static">
+                <Toolbar className={classes.toolbar}>
+                    <div className={classes.flex}>
+                        <NavLink to="/" className={classes.link}>
+                            <Typography type="title" className={classes.title}>
+                                MProm
+                            </Typography>
+                        </NavLink>
                     </div>
-                </Drawer>
-            </header>
-        )
-    }
-}
+                    <Hidden mdUp>
+                        <IconButton
+                            color="inherit"
+                            onClick={() => toggleDrawer(!showDrawer)}>
+                            <Icon
+                                className="material-icons"
+                                aria-label="Menu"
+                            >
+                                menu
+                            </Icon>
+                        </IconButton>
+                    </Hidden>
+                    <Hidden mdDown>
+                        <Navigation/>
+                    </Hidden>
+                </Toolbar>
+            </AppBar>
+            <Drawer
+                classes={{
+                    paperAnchorRight: classes.paperAnchorRight
+                }}
+                anchor="right"
+                open={showDrawer}
+                onClose={() => toggleDrawer(!showDrawer)}>
+                <div
+                    tabIndex={0}
+                    role="button"
+                    onClick={() => toggleDrawer(!showDrawer)}
+                >
+                    <Navigation/>
+                </div>
+            </Drawer>
+        </header>
+    )
+};
 
-export default withStyles(styles)(Header);
+const enhance = compose(
+    withState('showDrawer', 'toggleDrawer', false),
+    withStyles(styles)
+);
+
+export default enhance(Header);

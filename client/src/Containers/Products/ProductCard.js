@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
     Card,
     CardContent,
@@ -7,8 +7,9 @@ import {
     Collapse,
     withStyles
 } from "material-ui-next";
-import { Carousel } from 'react-responsive-carousel';
+import {Carousel} from 'react-responsive-carousel';
 import '../../../node_modules/react-responsive-carousel/lib/styles/carousel.min.css';
+import {compose, withState} from "recompose";
 
 
 const styles = theme => (
@@ -41,60 +42,54 @@ const styles = theme => (
     }
 );
 
-class ProductCard extends Component {
+const ProductCard = (props) => {
+    const {
+        classes,
+        selectedProduct: {
+            title,
+            vendorCode,
+            images,
+            description,
+        },
+        showDescription,
+        toggleDescription
+    } = props;
 
-    state= {
-        showDescription: false
-    };
-
-    triggerDescriptionHandler = () => {
-        this.setState(prevState => {
-            return {
-                showDescription: !prevState.showDescription
-            }
-        })
-    };
-
-    render(){
-        let {
-            classes,
-            selectedProduct: {
-                title,
-                vendorCode,
-                images,
-                description,
-            }
-        } = this.props;
-
-        return (
-            <Card>
-                <div className={classes.content}>
-
-                    <Carousel dynamicHeight>
-                        {images.map((link, i) => (
-                            <img key={i} src={link} alt="product" />
-                        ))}
-                    </Carousel>
-
-                    <div className={classes.description}>
-                        <CardHeader title={title} subheader={`Артикул: ${vendorCode}`} />
-                        <CardContent>
-                            <Button
-                                className={classes.collapseButton}
-                                fullWidth={true}
-                                onClick={this.triggerDescriptionHandler}
-                            >
-                                Показать описание
-                            </Button>
-                            <Collapse in={this.state.showDescription}>
-                                <div dangerouslySetInnerHTML={{__html: description}}/>
-                            </Collapse>
-                        </CardContent>
-                    </div>
+    return (
+        <Card>
+            <div className={classes.content}>
+                <Carousel dynamicHeight>
+                    {
+                        images.map((link, i) => (
+                            <img key={i} src={link} alt="product"/>
+                        ))
+                    }
+                </Carousel>
+                <div className={classes.description}>
+                    <CardHeader title={title} subheader={`Артикул: ${vendorCode}`}/>
+                    <CardContent>
+                        <Button
+                            className={classes.collapseButton}
+                            fullWidth={true}
+                            onClick={() => toggleDescription(!showDescription)}
+                        >
+                            Показать описание
+                        </Button>
+                        <Collapse in={showDescription}>
+                            <div dangerouslySetInnerHTML={{__html: description}}/>
+                        </Collapse>
+                    </CardContent>
                 </div>
-            </Card>
-        );
-    }
-}
+            </div>
+        </Card>
+    )
+};
 
-export default withStyles(styles)(ProductCard);
+const showDescription = withState('showDescription', 'toggleDescription', false);
+
+const enhance = compose(
+    showDescription,
+    withStyles(styles)
+);
+
+export default enhance(ProductCard);

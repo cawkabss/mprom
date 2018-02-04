@@ -11,7 +11,9 @@ import Filter from "./Filter";
 import Progress from "../../UI/Progress/Progress";
 import ProductsTable from "./ProductsTable";
 import Modal from "./Modal";
+import transformedProductsList from '../../selectors/productsSelector';
 import {productsListClear, loadProductsList} from "../../store/actions/products/actions";
+import DataTable from "../../UI/DataTable/DataTable";
 
 const styles = theme => (
     {
@@ -36,6 +38,53 @@ const styles = theme => (
         }
     }
 );
+
+const TABLE_COLUMNS = [
+    {
+        key: 'image',
+        label: 'Фото',
+    },
+    {
+        key: 'title',
+        label: 'Название',
+    },
+    {
+        key: 'vendorCode',
+        label: 'Артикул'
+    },
+    {
+        key: 'provider',
+        label: 'Поставщик',
+    },
+    {
+        key: 'providerPrice',
+        label: 'Оптовая цена',
+        sortable: true
+    },
+    {
+        key: 'markup',
+        label: 'Наценка',
+        sortable: true
+    },
+    {
+        key: 'ourPrice',
+        label: 'Наша цена',
+        sortable: true
+    },
+    {
+        key: 'available',
+        label: 'Наличие',
+    },
+    {
+        key: 'count',
+        label: 'Остаток',
+    },
+    {
+        key: 'ordersCount',
+        label: 'Заказы',
+        sortable: true
+    }
+];
 
 class Products extends Component {
 
@@ -67,7 +116,7 @@ class Products extends Component {
 
     render() {
         const {selectedProduct, isOpenModal} = this.state;
-        const {productsList, loading, classes} = this.props;
+        const {transformedProductsList, loading, classes} = this.props;
 
         return (
             <section className={classes.root}>
@@ -75,9 +124,13 @@ class Products extends Component {
                 <Typography>
                     *Для просмотра детальной информации или оформлении заказа сделайте двойной клик мышкой на товаре.
                 </Typography>
-                <ProductsTable
-                    productsList={productsList}
-                    selectedProductHandler={this.selectedProductHandler}
+                <DataTable
+                    columns={TABLE_COLUMNS}
+                    data={transformedProductsList}
+                    showPagination={true}
+                    showRowHover={true}
+                    onCellDoubleClick={this.selectedProductHandler}
+                    rowsPerPageOptions={[10, 20, 50, 100]}
                 />
                 <Progress show={loading}/>
                 <Modal
@@ -94,6 +147,7 @@ class Products extends Component {
 const mapStateToProps = (state) => {
     return {
         productsList: state.products.productsList,
+        transformedProductsList: transformedProductsList(state),
         loading: state.products.loading
     }
 };

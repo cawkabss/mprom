@@ -50,27 +50,11 @@ const TABLE_COLUMNS = [
 ];
 
 const ProductsTable = ({productsList, selectedProductHandler}) => {
-    const transformedProducts = productsList
-        .map((product, i) => {
-            return {
-                id: i,
-                image: <img alt="img" style={{height: '100%'}} src={product.images[0]}/>,
-                title: product.title,
-                vendorCode: product.vendorCode,
-                provider: <a href={product.provider.url} target="_blank">{product.provider.name}</a>,
-                providerPrice: product.price.providerPrice,
-                markup: product.price.markup,
-                ourPrice: product.price.ourPrice,
-                available: product.available,
-                count: product.count,
-                ordersCount: product.orders.length
-            }
-        });
 
     return (
             <DataTable
                 columns={TABLE_COLUMNS}
-                data={transformedProducts}
+                data={productsList}
                 showPagination={true}
                 showRowHover={true}
                 onCellDoubleClick={selectedProductHandler}

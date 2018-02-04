@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import { withStyles } from 'material-ui-next/styles';
 import Table, { TableBody, TableCell, TableRow, TableFooter, TablePagination } from 'material-ui-next/Table';
 import Paper from 'material-ui-next/Paper';
@@ -28,7 +28,7 @@ const styles = theme => {
     })
 };
 
-class DataTable extends PureComponent {
+class DataTable extends Component {
 
     state = {
         page: 1,
@@ -46,7 +46,7 @@ class DataTable extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps){
-
+console.log(this.props.data,nextProps.data)
         if(this.props.data !== nextProps.data) {
             this.setState({data: nextProps.data})
         }

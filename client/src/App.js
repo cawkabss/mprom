@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import MuiThemeProviderNext from 'material-ui-next/styles/MuiThemeProvider';
 import {Route, Redirect} from 'react-router-dom';
 import Reboot from 'material-ui-next/Reboot';
 
 import Layout from "./Containers/Layout/Layout";
-import Providers from "./Containers/Providers/Providers";
+import Providers from "./Containers/Providers";
 import Products from "./Containers/Products";
 import Shops from "./Containers/Shops/Shops";
 import Orders from "./Containers/Orders";
@@ -17,11 +17,10 @@ const themeV1 = createMuiTheme({
         type: 'light', // Switching the dark mode on is a single property value change.
     },
 });
-class App extends Component {
-    render() {
-        return (
-            <MuiThemeProvider>
-                <MuiThemeProviderNext theme={themeV1}>
+const App = props => {
+    return (
+        <MuiThemeProvider>
+            <MuiThemeProviderNext theme={themeV1}>
                 <Layout>
                     <Reboot />
                     <Route path="/" exact render={() => <Redirect to="/products"/>}/>
@@ -32,9 +31,8 @@ class App extends Component {
                     <Route path="/search" component={Search}/>
                 </Layout>
             </MuiThemeProviderNext>
-            </MuiThemeProvider>
-        );
-    }
-}
+        </MuiThemeProvider>
+    );
+};
 
 export default App;

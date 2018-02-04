@@ -3,7 +3,8 @@ import {connect} from 'react-redux';
 import {compose} from "recompose";
 import {
     withMobileDialog,
-    withStyles, Typography
+    withStyles,
+    Typography
 } from "material-ui-next";
 
 import Filter from "./Filter";

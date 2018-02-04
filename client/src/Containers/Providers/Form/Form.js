@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
+import {compose} from "recompose";
+import {connect} from 'react-redux';
 import {ValidatorForm} from 'react-form-validator-core';
 import {TextValidator} from 'react-material-ui-form-validator';
-import {connect} from 'react-redux';
 import {
     Paper,
     Button,
@@ -12,6 +13,8 @@ import {
     withStyles,
     Typography, Icon
 } from 'material-ui-next';
+import {amber} from "material-ui-next/colors";
+import classNames from "classnames";
 
 import {
     confirmError,
@@ -23,8 +26,6 @@ import {
     updateProvider
 } from "../../../store/actions/providers/actions";
 import Progress from "../../../UI/Progress/Progress";
-import {amber} from "material-ui-next/colors/index";
-import classNames from "classnames";
 
 const styles = theme => (
     {
@@ -85,7 +86,7 @@ const styles = theme => (
     }
 );
 
-class ProviderForm extends Component {
+class Form extends Component {
 
     state = {
         validation: {
@@ -416,4 +417,9 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProviderForm));
+const enhance = compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    withStyles(styles)
+);
+
+export default enhance(Form);

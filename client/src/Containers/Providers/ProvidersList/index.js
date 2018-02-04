@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
+import {compose} from "recompose";
 import {connect} from 'react-redux';
 import {Grid, withStyles} from 'material-ui-next';
 
-import ProvidersItem from "./ProvidersItem";
+import ProvidersItem from "./Item";
 import Progress from "../../../UI/Progress/Progress";
 import AddButtonCard from "../../../UI/ButtonCard/AddButtonCard";
 import {loadProvidersList} from "../../../store/actions/providers/actions";
+
 
 const styles = {
     root: {
@@ -18,15 +20,9 @@ const styles = {
 
 class ProvidersList extends Component {
 
-    state = {
-        selectedProviderId: '',
-        showModal: false
-    };
-
     componentDidMount() {
 
         if (!this.props.providersList.length) {
-
             this.props.loadProvidersList();
         }
     }
@@ -83,4 +79,9 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProvidersList));
+const enhance = compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    withStyles(styles)
+);
+
+export default enhance(ProvidersList);

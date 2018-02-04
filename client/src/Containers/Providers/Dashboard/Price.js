@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {compose} from "recompose";
 import {connect} from 'react-redux';
 import {
     Stepper,
@@ -83,14 +84,13 @@ const styles = {
     }
 };
 
-class ProviderManager extends Component {
+class PriceManager extends Component {
 
     state = {
         stepIndex: 0,
         canNext: false,
         priceFile: null,
         finished: false,
-        error: null
     };
 
     componentDidMount() {
@@ -145,7 +145,6 @@ class ProviderManager extends Component {
                 data: {settings},
                 parsedProducts
             },
-
             classes
         } = this.props;
         const priceFile = this.state.priceFile;
@@ -212,11 +211,13 @@ class ProviderManager extends Component {
                             *Вы можете изменить конфигурацию во вкладке "Изменить"
                         </Typography>
                         <ul>
-                            {transformedSettings.map((item, i) => (
-                                <li key={i} className={classes.settingsItem}>
-                                    {`${item.key}: ${item.value}`}
+                            {
+                                transformedSettings.map((item, i) => (
+                                    <li key={i} className={classes.settingsItem}>
+                                        {`${item.key}: ${item.value}`}
                                     </li>
-                            ))}
+                                ))
+                            }
                         </ul>
                         <Button
                             raised
@@ -351,4 +352,9 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProviderManager));
+const enhance = compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    withStyles(styles)
+);
+
+export default enhance(PriceManager);

@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
+import {compose} from "recompose";
 import {withRouter} from 'react-router';
-import ButtonCard from "../../../UI/ButtonCard/ButtonCard";
 import {withStyles, Typography} from "material-ui-next";
 import {deepOrange} from "material-ui-next/colors";
+
+import ButtonCard from "../../../UI/ButtonCard/ButtonCard";
 
 const styles = {
     content: {
@@ -65,4 +67,9 @@ class ProvidersItem extends Component {
     }
 }
 
-export default withRouter(withStyles(styles)(ProvidersItem));
+const enhance = compose(
+    withRouter,
+    withStyles(styles)
+);
+
+export default enhance(ProvidersItem);

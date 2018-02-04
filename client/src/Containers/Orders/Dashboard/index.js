@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {compose} from "redux";
 import {
     Button,
     Icon,
@@ -7,8 +8,8 @@ import {
     Collapse
 } from "material-ui-next";
 
-import OrdersFilter from "./OrdersFilter";
-import OrdersStatistics from './OrdersStatistics/OrdersStatistics'
+import Filter from "./Filter";
+import Statistics from './Statistics'
 import OrdersTable from "./OrdersTable";
 import Progress from "../../../UI/Progress/Progress";
 import {clearOrdersList} from "../../../store/actions/orders/actions";
@@ -23,13 +24,13 @@ const styles = {
     }
 };
 
-class OrdersDashboard extends Component{
+class Dashboard extends Component {
 
     state = {
         showStatistics: false,
     };
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.props.clearOrdersList();
     }
 
@@ -42,13 +43,13 @@ class OrdersDashboard extends Component{
         })
     };
 
-    render(){
+    render() {
         const {filteredOrders, loading, classes} = this.props;
         const {showStatistics} = this.state;
 
         return (
             <section className={classes.root}>
-                <OrdersFilter className={classes.margin}/>
+                <Filter className={classes.margin}/>
 
                 <div className={classes.margin}>
                     <Button
@@ -61,7 +62,7 @@ class OrdersDashboard extends Component{
                         </Icon>
                     </Button>
                     <Collapse in={this.state.showStatistics}>
-                        <OrdersStatistics />
+                        <Statistics/>
                     </Collapse>
                 </div>
                 <OrdersTable
@@ -88,4 +89,9 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(OrdersDashboard));
+const enhance = compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    withStyles(styles)
+);
+
+export default enhance(Dashboard);

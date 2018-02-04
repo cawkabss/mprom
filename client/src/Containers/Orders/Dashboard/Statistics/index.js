@@ -20,7 +20,7 @@ const styles = {
     }
 };
 
-class OrdersStatistics extends Component {
+class Statistics extends Component {
 
     componentDidMount() {
         this.props.getOrdersStatistics();
@@ -62,19 +62,19 @@ class OrdersStatistics extends Component {
                 icon: 'shopping_cart',
                 color: indigo[600],
                 title: "Всех заказов",
-                value: `${allOrdersCount} грн.`
+                value: allOrdersCount
             },
             {
                 icon: 'add_shopping_cart',
                 color: green[600],
                 title: "Подтвержденных",
-                value: `${doneOrdersCount} грн.`
+                value: doneOrdersCount
             },
             {
                 icon: 'remove_shopping_cart',
                 color: pink[600],
                 title: "Не подтвержденных",
-                value: `${allOrdersCount - doneOrdersCount} грн.`
+                value: allOrdersCount - doneOrdersCount
             }
         ];
 
@@ -134,4 +134,4 @@ const enhance = compose(
     withStyles(styles)
 );
 
-export default enhance(OrdersStatistics);
+export default enhance(Statistics);

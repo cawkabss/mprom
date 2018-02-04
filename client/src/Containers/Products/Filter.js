@@ -9,7 +9,7 @@ import {compose} from "recompose";
 
 const styles = {
     root:{
-      padding: 15
+        padding: 15
     },
 
     form: {
@@ -26,7 +26,7 @@ const styles = {
 
 };
 
-class ProductsHeader extends Component {
+class Filter extends Component {
 
     state = {
         query: '',
@@ -113,4 +113,4 @@ const enhance = compose(
     withStyles(styles)
 );
 
-export default enhance(ProductsHeader);
+export default enhance(Filter);

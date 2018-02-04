@@ -6,9 +6,9 @@ import Reboot from 'material-ui-next/Reboot';
 
 import Layout from "./Containers/Layout/Layout";
 import Providers from "./Containers/Providers/Providers";
-import Products from "./Containers/Products/Products";
+import Products from "./Containers/Products";
 import Shops from "./Containers/Shops/Shops";
-import Orders from "./Containers/Orders/Orders";
+import Orders from "./Containers/Orders";
 import Search from "./Containers/Search/Search";
 import createMuiTheme from "material-ui-next/styles/createMuiTheme";
 

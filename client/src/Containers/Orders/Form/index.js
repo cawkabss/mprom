@@ -102,7 +102,7 @@ const styles = theme => (
     }
 );
 
-class OrderForm extends Component {
+class Form extends Component {
 
     state = {
         validation: {
@@ -274,27 +274,27 @@ class OrderForm extends Component {
                                 </MenuItem>
                             </Select>
                         </div>
-                            <div className={classes.item}>
-                                <label className={classes.label}>
-                                    Выберите метод оплаты:
-                                </label>
-                                <Select
-                                    autoWidth
-                                    value={orderData.paidMethod}
-                                    onChange={this.changeOrderDataHandler}
-                                    input={<Input id="select-paidMethod" name="paidMethod" />}
-                                >
-                                    <MenuItem value="Наложка">
-                                        Наложка
-                                    </MenuItem>
-                                    <MenuItem value="Предоплата">
-                                        Предоплата
-                                    </MenuItem>
-                                    <MenuItem value="Наличка">
-                                        Наличка
-                                    </MenuItem>
-                                </Select>
-                            </div>
+                        <div className={classes.item}>
+                            <label className={classes.label}>
+                                Выберите метод оплаты:
+                            </label>
+                            <Select
+                                autoWidth
+                                value={orderData.paidMethod}
+                                onChange={this.changeOrderDataHandler}
+                                input={<Input id="select-paidMethod" name="paidMethod" />}
+                            >
+                                <MenuItem value="Наложка">
+                                    Наложка
+                                </MenuItem>
+                                <MenuItem value="Предоплата">
+                                    Предоплата
+                                </MenuItem>
+                                <MenuItem value="Наличка">
+                                    Наличка
+                                </MenuItem>
+                            </Select>
+                        </div>
                         <div className={classes.item}>
                             <label className={classes.label}>
                                 Введите номер заказа/ТТН (обязательно):
@@ -372,4 +372,4 @@ const enhance = compose(
     withStyles(styles),
 );
 
-export default enhance(OrderForm);
+export default enhance(Form);

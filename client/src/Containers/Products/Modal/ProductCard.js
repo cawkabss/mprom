@@ -8,7 +8,7 @@ import {
     withStyles
 } from "material-ui-next";
 import {Carousel} from 'react-responsive-carousel';
-import '../../../node_modules/react-responsive-carousel/lib/styles/carousel.min.css';
+import '../../../../node_modules/react-responsive-carousel/lib/styles/carousel.min.css';
 import {compose, withState} from "recompose";
 
 

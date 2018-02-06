@@ -67,7 +67,7 @@ const orderReducer = (state = initialState, action) => {
                 error: action.payload
             };
 
-        case actionTypes.ORDER_CONFIRM_ERROR:
+        case actionTypes.ORDERS_CONFIRM_ERROR:
             return {
                 ...state,
                 error: false

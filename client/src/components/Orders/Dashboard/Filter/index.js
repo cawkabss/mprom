@@ -65,7 +65,7 @@ class Filter extends Component {
 
     componentDidMount() {
         if (!this.props.providersList.length) {
-            this.props.loadProvidersList()
+            this.props.loadProvidersList();
         }
 
         this.props.getOrdersList(this.state);
@@ -81,26 +81,22 @@ class Filter extends Component {
         this.props.getOrdersList(this.state);
     };
 
-    formatMinDate = (date) => {
+    formatDate = type => date => {
         const formatedDate = date;
         const options = {
             year: 'numeric',
             day: 'numeric',
             month: 'numeric',
         };
-        formatedDate.setHours(0, 0, 0, 0);
-        return formatedDate.toLocaleString("ru", options)
-    };
 
-    formatMaxDate = (date) => {
-        const formatedDate = date;
-        const options = {
-            year: 'numeric',
-            day: 'numeric',
-            month: 'numeric',
-        };
-        formatedDate.setHours(23, 59, 59, 59);
-        return formatedDate.toLocaleString("ru", options)
+        if (type === 'minDate') {
+            formatedDate.setHours(0, 0, 0, 0);
+        }
+        else {
+            formatedDate.setHours(23, 59, 59, 59);
+        }
+
+        return formatedDate.toLocaleString("ru", options);
     };
 
     selectChangeHandler = propName => event => {
@@ -117,8 +113,7 @@ class Filter extends Component {
                     <DateRange
                         minDate={minDate}
                         maxDate={maxDate}
-                        formatMinDate={this.formatMinDate}
-                        formatMaxDate={this.formatMaxDate}
+                        formatDate={this.formatDate}
                         handleChangeDate={this.handleChangeDate}
                     />
                     <Selects

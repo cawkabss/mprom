@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import { withStyles } from 'material-ui-next/styles';
-import Table, { TableBody, TableCell, TableRow, TableFooter, TablePagination } from 'material-ui-next/Table';
+import Table from 'material-ui-next/Table';
 import Paper from 'material-ui-next/Paper';
+import {withStyles} from 'material-ui-next/styles';
+import classNames from 'classnames';
+
 import DataTableToolbar from './DataTableToolbar';
 import DataTableHead from "./DataTableHead";
-import Checkbox from "material-ui-next/Checkbox/";
-import classNames from 'classnames';
+import DataTableFooter from "./DataTableFooter";
+import DataTableBody from "./DataTableBody";
 
 const styles = theme => {
     return ({
@@ -20,7 +22,7 @@ const styles = theme => {
         head: {
             fontWeight: 700
         },
-        cell:{
+        cell: {
             height: 48,
             padding: '0 15px',
             whiteSpace: 'initial'
@@ -39,20 +41,19 @@ class DataTable extends Component {
         data: []
     };
 
-    componentWillMount(){
+    componentWillMount() {
         this.setState({
             data: this.props.data.map(i => Object.assign({}, i))
         })
     }
 
-    componentWillReceiveProps(nextProps){
-console.log(this.props.data,nextProps.data)
-        if(this.props.data !== nextProps.data) {
+    componentWillReceiveProps(nextProps) {
+        if (this.props.data !== nextProps.data) {
             this.setState({data: nextProps.data})
         }
     }
 
-    handleRequestSort = (event, property) => {
+    handleSort = property => event => {
         const orderBy = property;
         let order = 'desc';
 
@@ -65,19 +66,18 @@ console.log(this.props.data,nextProps.data)
                 ? this.state.data.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
                 : this.state.data.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
 
-        this.setState({ data, order, orderBy });
+        this.setState({data, order, orderBy});
     };
 
-    handleSelectAllClick = (event, checked) => {
+    selectAllHandler = (event, checked) => {
         if (checked) {
-            this.setState({ selected: this.props.data.map((n, i) => n) });
-            return;
+            return this.setState({selected: this.state.data});
         }
-        this.setState({ selected: [] });
+        this.setState({selected: []});
     };
 
-    handleClick = (event, selectItem) => {
-        const { selected } = this.state;
+    selectHandler = selectItem => event => {
+        const {selected} = this.state;
         const selectedIndex = selected.findIndex(i => selectItem.id === i.id);
         let newSelected = [];
 
@@ -94,15 +94,15 @@ console.log(this.props.data,nextProps.data)
             );
         }
 
-        this.setState({ selected: newSelected });
+        this.setState({selected: newSelected});
     };
 
     handleChangePage = (event, page) => {
-        this.setState({ page });
+        this.setState({page});
     };
 
     handleChangeRowsPerPage = event => {
-        this.setState({ rowsPerPage: event.target.value });
+        this.setState({rowsPerPage: event.target.value});
     };
 
     clearSelected = () => {
@@ -110,8 +110,6 @@ console.log(this.props.data,nextProps.data)
             selected: []
         })
     };
-
-    isSelected = item => this.state.selected.findIndex(i => i.id === item.id) !== -1;
 
     render() {
         const {
@@ -125,27 +123,22 @@ console.log(this.props.data,nextProps.data)
             onCellClick,
             onCellDoubleClick,
             toolbarTitle = '',
-            toolBarActions = [],
-            selectedToolbarActions = [],
+            toolbarActionsData = [],
             showToolbar = false
 
         } = this.props;
 
         const {rowsPerPage, data, page, selected, order, orderBy} = this.state;
-        const productsOnPage = showPagination && (data.length > rowsPerPage) ?
-            data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : data;
 
         return (
             <Paper className={classNames(classes.root, className)}>
-                {showToolbar ? (
-                    <DataTableToolbar
-                        selected={selected}
-                        title={toolbarTitle}
-                        actions={toolBarActions}
-                        selectedActions={selectedToolbarActions}
-                        onActionClick={this.clearSelected}
-                    />
-                ) : null}
+                <DataTableToolbar
+                    showToolbar={showToolbar}
+                    selected={selected}
+                    title={toolbarTitle}
+                    toolbarActionsData={toolbarActionsData}
+                    onActionClick={this.clearSelected}
+                />
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table}>
                         <DataTableHead
@@ -155,70 +148,33 @@ console.log(this.props.data,nextProps.data)
                             order={order}
                             orderBy={orderBy}
                             columnsData={columns}
-                            onSelectAllClick={this.handleSelectAllClick}
-                            onRequestSort={this.handleRequestSort}
+                            selectAllHandler={this.selectAllHandler}
+                            handleSort={this.handleSort}
                             rowCount={data.length}
                         />
-                    <TableBody>
-                        {productsOnPage.map((n, i) => {
-                            const isSelected = this.isSelected(n);
-                            return (
-                                <TableRow key={i}
-                                          hover={showRowHover}
-                                          role="checkbox"
-                                          aria-checked={isSelected}
-                                          tabIndex={-1}
-                                          selected={isSelected}
-                                >
-                                    { showCheckboxes ? (
-                                        <TableCell padding="checkbox" >
-                                            <Checkbox
-                                                onClick={event => this.handleClick(event, n)}
-                                                checked={isSelected} />
-                                        </TableCell> ) : null
-                                    }
-
-                                    {columns.map(column => {
-                                        return (
-                                            <TableCell
-                                                key={column.key}
-                                                onDoubleClick={
-                                                    () => onCellDoubleClick ? onCellDoubleClick(n, i) : null
-                                                }
-                                                onClick={() => onCellClick ? onCellClick(n, i) : null}
-                                                className={classes.cell}>{n[column.key]}</TableCell>
-                                        )
-                                    })}
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
-                    {
-                        showPagination ?
-
-                            <TableFooter>
-                                <TableRow>
-                                    <TablePagination
-                                        colSpan={6}
-                                        count={data.length}
-                                        rowsPerPage={rowsPerPage}
-                                        rowsPerPageOptions={rowsPerPageOptions}
-                                        page={page}
-                                        backiconbuttonprops={{
-                                            'aria-label': 'Previous Page',
-                                        }}
-                                        nexticonbuttonprops={{
-                                            'aria-label': 'Next Page',
-                                        }}
-                                        onChangePage={this.handleChangePage}
-                                        onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                                    />
-                                </TableRow>
-                            </TableFooter> :
-
-                            null
-                    }
-                </Table>
+                        <DataTableBody
+                            columns={columns}
+                            showPagination={showPagination}
+                            showRowHover={showRowHover}
+                            showCheckboxes={showCheckboxes}
+                            data={data}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onCellClick={onCellClick}
+                            onCellDoubleClick={onCellDoubleClick}
+                            selectHandler={this.selectHandler}
+                            selected={selected}
+                        />
+                        <DataTableFooter
+                            showPagination={showPagination}
+                            data={data}
+                            page={page}
+                            rowsPerPage={rowsPerPage}
+                            rowsPerPageOptions={rowsPerPageOptions}
+                            handleChangePage={this.handleChangePage}
+                            handleChangeRowsPerPage={this.handleChangeRowsPerPage}
+                        />
+                    </Table>
                 </div>
             </Paper>
         );

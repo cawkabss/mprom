@@ -112,7 +112,7 @@ class OrdersTable extends Component{
             }
         });
 
-        const selectedActions = [
+        const toolbarActionsData = [
             {
                 tooltip: 'Выполнен',
                 handleClick: (orders) => this.statusChangeHandler(orders, 'Выполнен'),
@@ -143,7 +143,7 @@ class OrdersTable extends Component{
                     showToolbar={true}
                     showCheckboxes={true}
                     toolbarTitle={'Таблица заказов'}
-                    selectedToolbarActions={selectedActions}
+                    toolbarActionsData={toolbarActionsData}
                     rowsPerPageOptions={[10, 20, 50, 100]}
                 />
                 <Snackbar

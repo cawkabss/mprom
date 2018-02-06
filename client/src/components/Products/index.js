@@ -9,9 +9,8 @@ import {
 
 import Filter from "./Filter";
 import Progress from "../../UI/Progress/Progress";
-import ProductsTable from "./ProductsTable";
 import Modal from "./Modal";
-import transformedProductsList from '../../selectors/productsSelector';
+import getTransformedProducts from '../../selectors/productsSelector';
 import {productsListClear, loadProductsList} from "../../store/actions/products/actions";
 import DataTable from "../../UI/DataTable/DataTable";
 
@@ -147,7 +146,7 @@ class Products extends Component {
 const mapStateToProps = (state) => {
     return {
         productsList: state.products.productsList,
-        transformedProductsList: transformedProductsList(state),
+        transformedProductsList: getTransformedProducts(state),
         loading: state.products.loading
     }
 };

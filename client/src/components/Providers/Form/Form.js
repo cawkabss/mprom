@@ -6,15 +6,10 @@ import {TextValidator} from 'react-material-ui-form-validator';
 import {
     Paper,
     Button,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
     withStyles,
-    Typography, Icon
+    Typography
 } from 'material-ui-next';
 import {amber} from "material-ui-next/colors";
-import classNames from "classnames";
 
 import {
     confirmError,
@@ -26,6 +21,7 @@ import {
     updateProvider
 } from "../../../store/actions/providers/actions";
 import Progress from "../../../UI/Progress/Progress";
+import withErrorHandler from "../../../hoc/WithErrorHandler";
 
 const styles = theme => (
     {
@@ -180,7 +176,7 @@ class Form extends Component {
     };
 
     render() {
-        const {provider, loading, error, confirmError, providerValid, classes} = this.props;
+        const {provider, loading, providerValid, classes} = this.props;
         const id = this.props.match.params.id;
 
         return (
@@ -363,33 +359,6 @@ class Form extends Component {
                     </ValidatorForm>
                 </Paper>
 
-                <Dialog
-                    open={!!error}
-                    onBackdropClick={confirmError}
-                >
-                    <DialogTitle className={classes.dialogTitle}>
-                        <Icon className={classNames("material-icons",
-                            classes.dialogTitleIcon)}
-                        >
-                            error_outline
-                        </Icon>
-                        Ошибка!
-                    </DialogTitle>
-                    <DialogContent>
-                        <Typography>
-                            {error && error.response ? error.response.data : 'Что-то пошло не так... '}
-                        </Typography>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button
-                            color="secondary"
-                            onClick={confirmError}
-                        >
-                            Ok
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-
                 <Progress show={loading}/>
             </section>
         )
@@ -412,13 +381,14 @@ const mapDispatchToProps = dispatch => {
         providerValidChange: (isValid) => dispatch(providerValidChange(isValid)),
         createProvider: () => dispatch(createProvider()),
         updateProvider: (id) => dispatch(updateProvider(id)),
-        confirmError: () => dispatch(confirmError()),
+        confirmErrorHandler: () => dispatch(confirmError()),
         loadProvider: (id) => dispatch(loadProvider(id))
     }
 };
 
 const enhance = compose(
     connect(mapStateToProps, mapDispatchToProps),
+    withErrorHandler,
     withStyles(styles)
 );
 

@@ -1,7 +1,6 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import createHistory from 'history/createBrowserHistory';
-import {routerReducer, routerMiddleware } from 'react-router-redux'
-
+import {routerReducer, routerMiddleware} from 'react-router-redux';
 import thunk from 'redux-thunk';
 
 import providersReducer from '../store/reducers/providersReducer/providersReducer';

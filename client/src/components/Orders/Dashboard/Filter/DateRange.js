@@ -20,8 +20,7 @@ const styles = theme => (
 
 const DateRange = (props) => {
     const {
-        formatMinDate,
-        formatMaxDate,
+        formatDate,
         minDate,
         maxDate,
         handleChangeDate,
@@ -32,7 +31,7 @@ const DateRange = (props) => {
         <Wrapper>
             <DatePicker
                 name="minDate"
-                formatDate={formatMinDate}
+                formatDate={formatDate('minDate')}
                 className={classes.item}
                 onChange={handleChangeDate('minDate')}
                 autoOk={false}
@@ -42,7 +41,7 @@ const DateRange = (props) => {
             <DatePicker
                 name="maxDate"
                 locale="en-US"
-                formatDate={formatMaxDate}
+                formatDate={formatDate('maxDate')}
                 className={classes.item}
                 onChange={handleChangeDate('maxDate')}
                 autoOk={false}

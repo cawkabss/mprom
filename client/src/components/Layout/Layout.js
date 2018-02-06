@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Wrapper from '../../hoc/Wrapper';
-import Header from "../../Components/Header/Header";
+import Header from "../Header/Header";
 
 const style = {
     margin: '15px 0'

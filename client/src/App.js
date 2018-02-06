@@ -4,12 +4,12 @@ import MuiThemeProviderNext from 'material-ui-next/styles/MuiThemeProvider';
 import {Route, Redirect} from 'react-router-dom';
 import Reboot from 'material-ui-next/Reboot';
 
-import Layout from "./Containers/Layout/Layout";
-import Providers from "./Containers/Providers";
-import Products from "./Containers/Products";
-import Shops from "./Containers/Shops/Shops";
-import Orders from "./Containers/Orders";
-import Search from "./Containers/Search/Search";
+import Layout from "./components/Layout/Layout";
+import Providers from "./components/Providers";
+import Products from "./components/Products";
+import Shops from "./components/Shops/Shops";
+import Orders from "./components/Orders";
+import Search from "./components/Search/Search";
 import createMuiTheme from "material-ui-next/styles/createMuiTheme";
 
 const themeV1 = createMuiTheme({

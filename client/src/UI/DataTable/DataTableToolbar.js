@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from 'material-ui-next/styles';
+import {withStyles} from 'material-ui-next/styles';
 import Toolbar from 'material-ui-next/Toolbar';
 import Typography from 'material-ui-next/Typography';
 import IconButton from 'material-ui-next/IconButton';
@@ -28,67 +28,49 @@ const toolbarStyles = theme => ({
     },
 });
 
-let DataTableToolbar = (props) => {
-    const { selected, classes, title, actions, selectedActions, onActionClick } = props;
+const DataTableToolbar = (props) => {
+    const {showToolbar, selected, classes, title, toolbarActionsData, onActionClick} = props;
 
-    return (
-        <Toolbar
-            className={classNames(classes.root, {
-                [classes.highlight]: selected.length > 0,
-            })}
-        >
-            <div className={classes.title}>
-                {selected.length > 0 ? (
-                    <Typography type="subheading">{selected.length} Выбрано</Typography>
-                ) : (
-                    <Typography type="title">{title}</Typography>
-                )}
-            </div>
-            <div className={classes.spacer} />
-            <div className={classes.actions}>
-                {selected.length > 0 ?
-                    selectedActions.map((action, i) => {
-                        return (
-                            <Tooltip key={i} title={action.tooltip}>
-                                <IconButton
-                                    style={{color: action.iconColor ? action.iconColor : 'inherit'}}
-                                    onClick={() => {
-                                        onActionClick();
-                                        action.handleClick(selected);
-                                    }}>
-                                    <Icon
-                                        className="material-icons"
-                                        aria-label="Menu"
-                                    >
-                                        {action.icon}
-                                    </Icon>
-                                </IconButton>
-                            </Tooltip>
-                        )
-                })
-                 : actions.map((action, i) => {
-                        return (
-                            <Tooltip>
-                                <IconButton
-                                    style={{color: action.iconColor ? action.iconColor : 'inherit'}}
-                                    onClick={() => {
-                                        onActionClick();
-                                        action.handleClick();
-                                    }}>
-                                    <Icon
-                                        className="material-icons"
-                                        aria-label="Menu"
-                                    >
-                                        {action.icon}
-                                    </Icon>
-                                </IconButton>
-                            </Tooltip>
-                        )
+    const toolbarTitle = selected.length > 0 ?
+        (<Typography type="subheading">{selected.length} Выбрано</Typography>) :
+        (<Typography type="title">{title}</Typography>);
 
-                    }) }
-            </div>
-        </Toolbar>
-    );
+
+    const toolbarActions = !selected.length ? null :
+        toolbarActionsData.map((action, i) => {
+            return (
+                <Tooltip key={i} title={action.tooltip}>
+                    <IconButton
+                        style={{color: action.iconColor ? action.iconColor : 'inherit'}}
+                        onClick={() => {
+                            onActionClick();
+                            action.handleClick(selected);
+                        }}>
+                        <Icon
+                            className="material-icons"
+                            aria-label="Menu"
+                        >
+                            {action.icon}
+                        </Icon>
+                    </IconButton>
+                </Tooltip>
+            )
+        });
+
+    return !showToolbar ? null :
+        (
+            <Toolbar
+                className={classNames(classes.root, {[classes.highlight]: selected.length > 0})}
+            >
+                <div className={classes.title}>
+                    {toolbarTitle}
+                </div>
+                <div className={classes.spacer}/>
+                <div className={classes.actions}>
+                    {toolbarActions}
+                </div>
+            </Toolbar>
+        )
 };
 
 export default withStyles(toolbarStyles)(DataTableToolbar);

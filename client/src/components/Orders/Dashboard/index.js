@@ -12,7 +12,9 @@ import Filter from "./Filter";
 import Statistics from './Statistics'
 import OrdersTable from "./OrdersTable";
 import Progress from "../../../UI/Progress/Progress";
-import {clearOrdersList} from "../../../store/actions/orders/actions";
+import {clearOrdersList, confirmErrorHandler} from "../../../store/actions/orders/actions";
+import {withState} from "recompose";
+import withErrorHandler from "../../../hoc/WithErrorHandler";
 
 const styles = {
     root: {
@@ -26,26 +28,12 @@ const styles = {
 
 class Dashboard extends Component {
 
-    state = {
-        showStatistics: false,
-    };
-
     componentWillUnmount() {
         this.props.clearOrdersList();
     }
 
-    toggleStatisticsHandler = () => {
-        this.setState(prevState => {
-            return {
-                ...prevState,
-                showStatistics: !prevState.showStatistics
-            }
-        })
-    };
-
     render() {
-        const {filteredOrders, loading, classes} = this.props;
-        const {showStatistics} = this.state;
+        const {filteredOrders, showStatistics, toggleStatistics, loading, classes} = this.props;
 
         return (
             <section className={classes.root}>
@@ -53,7 +41,7 @@ class Dashboard extends Component {
 
                 <div className={classes.margin}>
                     <Button
-                        onClick={this.toggleStatisticsHandler}
+                        onClick={() => toggleStatistics(!showStatistics)}
                         fullWidth={true}
                     >
                         Статистика
@@ -61,7 +49,7 @@ class Dashboard extends Component {
                             {showStatistics ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
                         </Icon>
                     </Button>
-                    <Collapse in={this.state.showStatistics}>
+                    <Collapse in={showStatistics}>
                         <Statistics/>
                     </Collapse>
                 </div>
@@ -85,13 +73,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        clearOrdersList: () => dispatch(clearOrdersList())
+        clearOrdersList: () => dispatch(clearOrdersList()),
+        confirmErrorHandler: () => dispatch(confirmErrorHandler())
     }
 };
 
 const enhance = compose(
     connect(mapStateToProps, mapDispatchToProps),
-    withStyles(styles)
+    withState('showStatistics', 'toggleStatistics', false),
+    withStyles(styles),
+    withErrorHandler
 );
 
 export default enhance(Dashboard);

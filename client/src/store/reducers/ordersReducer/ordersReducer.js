@@ -5,7 +5,7 @@ const initialState = {
     ordersByLastYear: [],
     ordersByLastMonth: [],
     loading: false,
-    error: null
+    error: false
 };
 
 const ordersReducer = (state = initialState, action) => {
@@ -103,6 +103,12 @@ const ordersReducer = (state = initialState, action) => {
             return {
                 ...state,
                 allOrders: state.filteredOrders.length ? [...state.filteredOrders, action.payload] : []
+            };
+
+        case actionTypes.ORDERS_CONFIRM_ERROR:
+            return {
+                ...state,
+                error: false
             };
 
         case actionTypes.ORDERS_LIST_CLEAR_STATE:

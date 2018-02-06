@@ -8,39 +8,38 @@ import {
 import Checkbox from 'material-ui-next/Checkbox';
 import Tooltip from 'material-ui-next/Tooltip';
 
-class DataTableHead extends Component {
-    createSortHandler = property => event => {
-        this.props.onRequestSort(event, property);
-    };
+const DataTableHead = props => {
 
-    render() {
-        const {
-            columnsData,
-            onSelectAllClick,
-            order,
-            orderBy,
-            selectedRowsCount,
-            rowCount,
-            showCheckboxes,
-            cellClassName
-        } = this.props;
+    const {
+        columnsData,
+        selectAllHandler,
+        order,
+        orderBy,
+        selectedRowsCount,
+        rowCount,
+        showCheckboxes,
+        cellClassName,
+        handleSort
+    } = props;
 
-        return (
-            <TableHead>
-                <TableRow>
-                    {
-                        showCheckboxes ? (
-                            <TableCell padding='checkbox'>
-                                <Checkbox
-                                    indeterminate={selectedRowsCount > 0 && selectedRowsCount < rowCount}
-                                    checked={selectedRowsCount === rowCount}
-                                    onChange={onSelectAllClick}
-                                />
-                            </TableCell>
-                        ) : null
-                    }
-                    {
-                        columnsData.map(column => {
+
+
+    return (
+        <TableHead>
+            <TableRow>
+                {
+                    showCheckboxes ? (
+                        <TableCell padding='checkbox'>
+                            <Checkbox
+                                indeterminate={selectedRowsCount > 0 && selectedRowsCount < rowCount}
+                                checked={selectedRowsCount === rowCount}
+                                onChange={selectAllHandler}
+                            />
+                        </TableCell>
+                    ) : null
+                }
+                {
+                    columnsData.map(column => {
                         return (
                             <TableCell
                                 className={cellClassName}
@@ -50,30 +49,29 @@ class DataTableHead extends Component {
                             >
                                 {
                                     column.sortable ? (
-                                        <Tooltip
-                                            title="Сортировка"
-                                            placement={column.numeric ? 'bottom-end' : 'bottom-start'}
-                                            enterDelay={300}
-                                        >
-                                            <TableSortLabel
-                                                active={orderBy === column.key}
-                                                direction={order}
-                                                onClick={this.createSortHandler(column.key)}
+                                            <Tooltip
+                                                title="Сортировка"
+                                                placement={column.numeric ? 'bottom-end' : 'bottom-start'}
+                                                enterDelay={300}
                                             >
-                                                {column.label}
-                                            </TableSortLabel>
-                                        </Tooltip>
-                                    ) :
+                                                <TableSortLabel
+                                                    active={orderBy === column.key}
+                                                    direction={order}
+                                                    onClick={handleSort(column.key)}
+                                                >
+                                                    {column.label}
+                                                </TableSortLabel>
+                                            </Tooltip>
+                                        ) :
                                         column.label
                                 }
 
                             </TableCell>
                         );
                     }, this)}
-                </TableRow>
-            </TableHead>
-        );
-    }
-}
+            </TableRow>
+        </TableHead>
+    );
+};
 
 export default DataTableHead;

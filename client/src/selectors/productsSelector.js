@@ -1,10 +1,10 @@
 import React from 'react';
 import {createSelector} from "reselect";
 
-const productGetter = state => state.products.productsList;
+const productsGetter = state => state.products.productsList;
 
-const transformProductsList = productsList => (
-    productsList
+const transformProducts = products => (
+    products
         .map((product, i) => {
             return {
                 id: i,
@@ -22,6 +22,6 @@ const transformProductsList = productsList => (
         })
 );
 
-const transformedProductsList = createSelector(productGetter, transformProductsList);
+const getTransformedProducts = createSelector(productsGetter, transformProducts);
 
-export default transformedProductsList;
+export default getTransformedProducts;

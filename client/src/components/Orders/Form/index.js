@@ -8,10 +8,6 @@ import {
     Typography,
     Button,
     withStyles,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
     Select,
     Input,
     MenuItem,
@@ -22,8 +18,9 @@ import DataTable from "../../../UI/DataTable/DataTable";
 import {
     orderChangeData, orderUpdateValid, createOrder,
     orderLoadProduct,
-    confirmCreateOrderError
+    confirmErrorHandler
 } from "../../../store/actions/orders/actions";
+import withErrorHandler from "../../../hoc/WithErrorHandler";
 
 const TABLE_COLUMNS = [
     {
@@ -169,8 +166,6 @@ class Form extends Component {
             orderValid,
             createOrderHandler,
             loading,
-            error,
-            confirmError,
             product,
             classes
         } = this.props;
@@ -321,26 +316,6 @@ class Form extends Component {
                     </ValidatorForm>
                 </Paper>
 
-                <Dialog
-                    open={!!error}
-                    onBackdropClick={confirmError}
-                >
-                    <DialogTitle>Ошибка!</DialogTitle>
-                    <DialogContent>
-                        <Typography>
-                            {error && error.response ? error.response.data : 'Что-то пошло не так... '}
-                        </Typography>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button
-                            color="secondary"
-                            onClick={confirmError}
-                        >
-                            Ok
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-
                 <Progress show={loading}/>
             </section>
         )
@@ -363,12 +338,13 @@ const mapDispatchToProps = dispatch => {
         changeOrderData: (propName, propValue) => dispatch(orderChangeData(propName, propValue)),
         createOrderHandler: (productId) => dispatch(createOrder(productId)),
         getProduct: (id) => dispatch(orderLoadProduct(id)),
-        confirmError: () => dispatch(confirmCreateOrderError())
+        confirmErrorHandler: () => dispatch(confirmErrorHandler())
     }
 };
 
 const enhance = compose(
     connect(mapStateToProps, mapDispatchToProps),
+    withErrorHandler,
     withStyles(styles),
 );
 

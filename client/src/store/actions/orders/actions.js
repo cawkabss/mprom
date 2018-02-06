@@ -111,9 +111,9 @@ export const getOrdersStatistics = () => {
     }
 };
 
-export const confirmCreateOrderError = () => (
+export const confirmErrorHandler = () => (
     {
-        type: actionTypes.ORDER_CONFIRM_ERROR
+        type: actionTypes.ORDERS_CONFIRM_ERROR
     }
 );
 

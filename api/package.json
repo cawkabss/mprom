@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build-prod": "npm install --only=dev && npm install npm run build",
+    "build-prod": "npm install --only=dev && npm install && npm run build",
     "build": "babel src -d dist --presets es2015,stage-2 --copy-files",
     "serve-dev": "nodemon ./src/bin/www.js --exec babel-node --presets es2015,stage-2"
   },

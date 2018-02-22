@@ -19,10 +19,7 @@ import ResultProduct from "./ResultProduct";
 import FinedProductsList from '../FinedProductsList/FinedProductList';
 import Settings from "./Settings";
 import Progress from "../../../UI/Progress/Progress";
-import {
-    parsing,
-    searchingClearState
-} from "../../../store/actions/search/actions";
+import {parsing, searchingClearState} from "../../../AC/search";
 
 const styles = {
     root: {
@@ -75,7 +72,7 @@ class Parsing extends Component {
     };
 
     render() {
-        const {loading, classes} = this.props;
+        const {searching, endSearching, classes} = this.props;
 
         return (
             <section className={classes.root}>
@@ -135,7 +132,7 @@ class Parsing extends Component {
                     </DialogActions>
                 </Dialog>
 
-                <Progress show={loading}/>
+                <Progress show={searching && !endSearching}/>
             </section>
         )
     }
@@ -143,10 +140,11 @@ class Parsing extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        settings: state.search.settings,
-        isDoneParsing: state.search.isDoneParsing,
-        loading: state.search.loading,
-        error: state.search.error
+        settings: state.search.searching.settings,
+        isDoneParsing: state.search.parsing.doneParsing,
+        searching: state.search.searching.searching,
+        endSearching: state.search.searching.endSearching,
+        error: state.search.parsing.error
     }
 };
 

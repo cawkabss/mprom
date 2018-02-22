@@ -6,8 +6,8 @@ import {Grid, withStyles} from 'material-ui-next';
 import ProvidersItem from "./Item";
 import Progress from "../../../UI/Progress/Progress";
 import AddButtonCard from "../../../UI/ButtonCard/AddButtonCard";
-import {loadProvidersList} from "../../../store/actions/providers/actions";
-
+import {loadProvidersList} from "../../../AC/providers";
+import {providersListSelector} from "../../../selectors/providersSelector";
 
 const styles = {
     root: {
@@ -21,18 +21,20 @@ const styles = {
 class ProvidersList extends Component {
 
     componentDidMount() {
+        const {loading, loaded} = this.props;
 
-        if (!this.props.providersList.length) {
+        if (!loading && !loaded) {
+            console.log(loading, loaded)
             this.props.loadProvidersList();
         }
     }
 
-    addNewProviderHandler = () => {
-        this.props.history.push(`/providers/new`);
-    };
-
     render() {
-        const {loading, providersList, classes} = this.props;
+        const {
+            loading,
+            providersList,
+            classes
+        } = this.props;
 
         return (
             <section className={classes.root}>
@@ -53,6 +55,7 @@ class ProvidersList extends Component {
                                 >
                                     <ProvidersItem
                                         provider={provider}
+                                        onProviderClick={this.clickProviderHandler}
                                     />
                                 </Grid>
                             )
@@ -64,12 +67,22 @@ class ProvidersList extends Component {
             </section>
         )
     }
+
+
+    addNewProviderHandler = () => {
+        this.props.history.push(`/providers/new`);
+    };
+
+    clickProviderHandler = (id) => {
+        this.props.history.push(`/providers/${id}`);
+    }
 }
 
 const mapStateToProps = (state) => {
     return {
-        providersList: state.providers.providersList,
-        loading: state.providers.loading
+        providersList: providersListSelector(state),
+        loading: state.providers.list.loading,
+        loaded: state.providers.list.loaded
     }
 };
 

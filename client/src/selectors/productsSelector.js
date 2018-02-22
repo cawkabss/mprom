@@ -1,7 +1,7 @@
 import React from 'react';
 import {createSelector} from "reselect";
 
-const productsGetter = state => state.products.productsList;
+const productsGetter = state => state.products.list.data;
 
 const transformProducts = products => (
     products
@@ -22,6 +22,4 @@ const transformProducts = products => (
         })
 );
 
-const getTransformedProducts = createSelector(productsGetter, transformProducts);
-
-export default getTransformedProducts;
+export const transformedProductsSelector = createSelector(productsGetter, transformProducts);

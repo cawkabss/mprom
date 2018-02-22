@@ -76,7 +76,7 @@ const ProductCard = (props) => {
                             Показать описание
                         </Button>
                         <Collapse in={showDescription}>
-                            <div dangerouslySetInnerHTML={{__html: description}}/>
+                            <div dangerouslySetInnerHTML={{__html: description.html}}/>
                         </Collapse>
                     </CardContent>
                 </div>

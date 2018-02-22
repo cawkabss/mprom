@@ -8,11 +8,12 @@ import {
 } from "material-ui-next";
 
 import Filter from "./Filter";
-import Progress from "../../UI/Progress/Progress";
-import Modal from "./Modal";
-import getTransformedProducts from '../../selectors/productsSelector';
-import {productsListClear, loadProductsList} from "../../store/actions/products/actions";
 import DataTable from "../../UI/DataTable/DataTable";
+import Modal from "./Modal";
+import Progress from "../../UI/Progress/Progress";
+import {productsListClear, loadProductsList, confirmErrorHandler} from "../../AC/products";
+import {transformedProductsSelector} from '../../selectors/productsSelector';
+import withErrorHandler from "../../hoc/WithErrorHandler";
 
 const styles = theme => (
     {
@@ -145,23 +146,26 @@ class Products extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        productsList: state.products.productsList,
-        transformedProductsList: getTransformedProducts(state),
-        loading: state.products.loading
+        productsList: state.products.list.data,
+        transformedProductsList: transformedProductsSelector(state),
+        loading: state.products.list.loading,
+        error: state.products.list.error
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         productsListClear: () => dispatch(productsListClear()),
-        loadProductsList: () => dispatch(loadProductsList())
+        loadProductsList: () => dispatch(loadProductsList()),
+        confirmErrorHandler: () => dispatch(confirmErrorHandler())
     }
 };
 
 const enhance = compose(
     connect(mapStateToProps, mapDispatchToProps),
     withStyles(styles),
-    withMobileDialog()
+    withMobileDialog(),
+    withErrorHandler
 );
 
 export default enhance(Products);

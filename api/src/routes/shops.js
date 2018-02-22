@@ -87,7 +87,14 @@ router.get('/:id/statistics', (req, res, next) => {
                     Product.count({provider: {$in: shop.providers}}),
                     Order.count({provider: {$in: shop.providers}})
                 ])
-                    .then(result => res.send(result))
+                    .then(result => {
+                        const statistics = {
+                            productsCount: result[0],
+                            ordersCount: result[1]
+                        };
+                        res.send(statistics);
+
+                    })
                     .catch(error => next(error))
             }
         })
@@ -116,7 +123,7 @@ router.get('/:id/save-price', (req, res, next) => {
                             });
 
                             product.vendorCode = `${product.vendorCode}-${product.provider.prefix}`;
-                            product.group = group.id ? group.id : '';
+                            product.groupId = group.id ? group.id : '';
                             return product
                         });
 

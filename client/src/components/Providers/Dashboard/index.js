@@ -7,8 +7,9 @@ import {withStyles} from 'material-ui-next';
 import Controls from "./Controls";
 import Statistics from "./Statistics";
 import PriceManager from "./Price";
-import Form from "../Form/Form";
-import {loadProductsStatistics, providerClearData} from "../../../store/actions/providers/actions";
+import Form from "../Form/index";
+import {getProviderData, providerClearData} from "../../../AC/providers";
+import Progress from "../../../UI/Progress/Progress";
 
 const styles = {
     root: {
@@ -26,7 +27,7 @@ class ProviderDashboard extends Component {
 
     componentDidMount() {
         const id = this.props.match.params.id;
-        this.props.loadProductsStatistics(id);
+        this.props.getProviderData(id);
     }
 
     componentWillUnmount() {
@@ -34,7 +35,7 @@ class ProviderDashboard extends Component {
     }
 
     render() {
-        const {classes} = this.props;
+        const {loading, classes} = this.props;
 
         return (
             <section className={classes.root}>
@@ -44,20 +45,27 @@ class ProviderDashboard extends Component {
                     <Route path="/providers/:id/edit" exact component={Form}/>
                     <Route path="/providers/:id/price" exact component={PriceManager}/>
                 </Switch>
+                <Progress show={loading} />
             </section>
         )
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        loadProductsStatistics: (id) => dispatch(loadProductsStatistics(id)),
-        providerClearData: () => dispatch(providerClearData())
+const mapStateToProps = state => (
+    {
+        loading: state.providers.form.loading
     }
-};
+);
+
+const mapDispatchToProps = dispatch => (
+    {
+        getProviderData: (id) => dispatch(getProviderData(id)),
+        providerClearData : () => dispatch(providerClearData())
+    }
+);
 
 const enhance = compose(
-    connect(null, mapDispatchToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     withStyles(styles)
 );
 

@@ -41,7 +41,10 @@ const getProductDetail = (url, i, cookie, timeOut) => {
                     title: getProductTitle($),
                     price: getProductPrice($),
                     images: getProductImages($),
-                    description: getProductDescription($),
+                    description: {
+                        html: getProductDescriptionHTML($) ? getProductDescriptionHTML($).trim() : null,
+                        text: getProductDescriptionText($) ? getProductDescriptionText($).trim() : null
+                    },
                     properties: getProductProps($),
                     keywords: getProductKeywords($),
                     category: getProductCategory($)
@@ -86,13 +89,18 @@ const getProductProps = ($) => {
     return props;
 };
 
-const getProductDescription = ($) => {
+const getProductDescriptionHTML = ($) => {
 
     $('div[data-qaid="product_description"] a').each(function () {
         $(this).replaceWith($(this).html());
     });
 
     return $('div[data-qaid="product_description"]').html();
+};
+
+const getProductDescriptionText = ($) => {
+
+    return $('div[data-qaid="product_description"]').text();
 };
 
 const getProductKeywords = ($) => {

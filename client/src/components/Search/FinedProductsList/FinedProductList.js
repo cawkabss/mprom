@@ -5,13 +5,13 @@ import {Grid, Typography} from "material-ui-next";
 import ProductCard from "../ProductCard";
 
 const finedProductsList = props => {
-    const {finedProducts, parsing, isSearchEnd} = props;
+    const {finedProducts, parsing, endSearching} = props;
     let result = null;
 
-    if (isSearchEnd && !finedProducts.length) {
+    if (endSearching && !finedProducts.length) {
         result = <Typography type="title" style={{textAlign: 'center'}}>Ничего не найдено!</Typography>
     }
-    else if (finedProducts.length) {
+    else if (endSearching && finedProducts.length) {
         result = (
             <Grid container spacing={24}>
                 {finedProducts.map((product, index) => {
@@ -35,10 +35,10 @@ const finedProductsList = props => {
 
 const mapStateToProps = (state) => {
     return {
-        finedProducts: state.search.finedProducts,
-        loading: state.search.loading,
-        isSearchEnd: state.search.isSearchEnd,
-        error: state.search.error
+        finedProducts: state.search.searching.data,
+        searching: state.search.searching.searching,
+        endSearching: state.search.searching.endSearching,
+        error: state.search.searching.error
     }
 };
 

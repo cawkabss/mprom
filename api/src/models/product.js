@@ -46,8 +46,15 @@ const schema = new Schema({
     },
 
     description: {
-       type: String,
-        default: 'Описание готовится!'
+        html: {
+            type: String,
+            default: 'Описание готовится!'
+        },
+        text: {
+            type: String,
+            default: 'Описание готовится!'
+        }
+
     },
 
     images: {

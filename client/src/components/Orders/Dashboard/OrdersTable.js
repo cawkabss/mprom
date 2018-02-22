@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import {NavLink} from "react-router-dom";
 import {connect} from 'react-redux';
 import Snackbar from "material-ui-next/Snackbar";
 import { orange, green, pink } from 'material-ui-next/colors';
 
 import Wrapper from "../../../hoc/Wrapper";
 import DataTable from "../../../UI/DataTable/DataTable";
-import {deleteOrders, updateOrders} from "../../../store/actions/orders/actions";
+import {deleteOrders, updateOrders} from "../../../AC/orders";
+import {ordersListSelector} from "../../../selectors/ordersSelectors";
 
 const TABLE_COLUMNS = [
     {
@@ -42,6 +42,10 @@ const TABLE_COLUMNS = [
         label: 'Товар (артикул)',
     },
     {
+        key: 'price',
+        label: 'Стоимость'
+    },
+    {
         key: 'markup',
         label: 'Выручка'
     },
@@ -60,19 +64,12 @@ class OrdersTable extends Component{
     };
 
     statusChangeHandler = (orders, status) => {
-
-        const ordersForUpdate = this.props.orders
-            .filter(order => orders.findIndex(i => i.id === order._id) > -1);
-
-        this.props.updateOrders(ordersForUpdate, status)
+        this.props.updateOrders(orders, status)
             .then(() => this.openSnackbarHandler('Статус выбранных заказов успешно изменен!'));
     };
 
     deleteHandler = (orders) => {
-        const ordersForDelete = this.props.orders
-            .filter(order => orders.findIndex(i => i.id === order._id) > -1);
-
-        this.props.deleteOrders(ordersForDelete)
+        this.props.deleteOrders(orders)
             .then(() => this.openSnackbarHandler('Выбранные заказы успешно удалены!'))
     };
 
@@ -89,29 +86,6 @@ class OrdersTable extends Component{
 
     render(){
         const {orders} = this.props;
-
-        const transformedOrders = orders.map((order) => {
-            const orderDate = new Date(order.createTime);
-
-            return {
-                id: order._id,
-                date: orderDate.toLocaleString("ru", {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                orderNumber: order.data.orderNumber,
-                customerName: order.data.customerName,
-                customerPhone: order.data.customerPhone,
-                customerEmail: order.data.customerEmail,
-                deliveryMethod: order.data.deliveryMethod,
-                paidMethod: order.data.paidMethod,
-                product: (
-                    <NavLink to={`/products?find=${order.product.vendorCode}`}>
-                        {order.product.vendorCode}
-                    </NavLink>
-                ),
-                markup: order.product.price.markup,
-                status: order.status,
-            }
-        });
-
         const toolbarActionsData = [
             {
                 tooltip: 'Выполнен',
@@ -137,7 +111,7 @@ class OrdersTable extends Component{
             <Wrapper>
                 <DataTable
                     columns={TABLE_COLUMNS}
-                    data={transformedOrders}
+                    data={orders}
                     showPagination={true}
                     showRowHover={true}
                     showToolbar={true}
@@ -163,6 +137,12 @@ class OrdersTable extends Component{
     }
 }
 
+const mapStateToProps = state => (
+    {
+        orders: ordersListSelector(state)
+    }
+);
+
 const mapDispatchToProps = (dispatch) => {
     return {
         updateOrders: (orders, status) => dispatch(updateOrders(orders, status)),
@@ -170,4 +150,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(null, mapDispatchToProps)(OrdersTable);
+export default connect(mapStateToProps, mapDispatchToProps)(OrdersTable);

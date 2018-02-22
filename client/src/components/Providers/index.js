@@ -3,7 +3,7 @@ import {Route, Switch} from 'react-router-dom';
 
 import ProvidersList from './ProvidersList';
 import Dashboard from "./Dashboard";
-import Form from "./Form/Form";
+import Form from "./Form";
 
 const Providers = props => (
     <Switch>

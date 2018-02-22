@@ -5,7 +5,7 @@ import {withRouter} from 'react-router';
 
 import Wrapper from "../../../hoc/Wrapper";
 import ProductCard from "../ProductCard";
-import {saveResultProduct} from "../../../store/actions/search/actions";
+import {saveResultProduct} from "../../../AC/search";
 
 class ResultProduct extends Component {
 
@@ -22,7 +22,7 @@ class ResultProduct extends Component {
     render() {
 
         const {
-            result,
+            parsedProduct,
         } = this.props;
 
         const actions = [
@@ -33,12 +33,13 @@ class ResultProduct extends Component {
                     onClick={this.props.saveResultProduct}
                     disabled={
                         !this.state.canNext &&
-                        (!result.images.length ||
-                            !result.properties.length ||
-                            !result.description ||
-                            !result.keywords ||
-                            !result.category)
-                    }>
+                        (
+                            !parsedProduct.images.length ||
+                            !parsedProduct.properties.length ||
+                            !parsedProduct.description.html ||
+                            !parsedProduct.keywords ||
+                            !parsedProduct.category
+                        )}>
                     Далее
                 </Button>
                 <div style={{display: 'flex', alignItems: 'center'}}>
@@ -54,14 +55,14 @@ class ResultProduct extends Component {
         ];
 
         return (
-            <ProductCard product={result} actions={actions}/>
+            <ProductCard product={parsedProduct} actions={actions}/>
         );
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        result: state.search.resultProduct,
+        parsedProduct: state.search.parsing.parsedProduct,
     }
 };
 

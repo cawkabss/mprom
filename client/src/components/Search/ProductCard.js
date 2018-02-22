@@ -15,9 +15,12 @@ import {
 import {green} from 'material-ui-next/colors';
 import classNames from 'classnames';
 
-import {chooseProductPart} from "../../store/actions/search/actions";
+import {chooseProductPart} from "../../AC/search";
 
 const styles = {
+    title: {
+        fontSize: '1rem'
+    },
     part: {
         position: 'relative',
         padding: '10px 0',
@@ -89,12 +92,31 @@ class FinedProductItem extends Component {
 
         return (
             <Card>
-                <CardHeader title={title} subheader={vendorCode ? vendorCode : ''}/>
+                <div className={classes.part}>
+                    <CardHeader
+                        classes={{title: classes.title}}
+                        title={title}
+                        subheader={vendorCode ? vendorCode : ''} />
+                    <IconButton
+                        className={
+                            classNames(
+                                classes.addButton,
+                                classes.addButtonGallery,
+                                showAddBtn ? classes.addButton : classes.hidden
+                            )}
+                        aria-label="Choose!"
+                        onClick={() => chooseProductPart('title', title)}
+                    >
+                        <Icon className="material-icons">
+                            add_circle
+                        </Icon>
+                    </IconButton>
+                </div>
                 <div className={classes.part}>
                     <Carousel>
-                        {images.map((link, i) => (
-                            <img key={i} src={link} alt="product"/>
-                        ))}
+                        {
+                            images.map((link, i) => (<img key={i} src={link} alt="product"/>))
+                        }
                     </Carousel>
                     <Tooltip placement="top-start" title="Выбрать">
                         <IconButton
@@ -103,7 +125,7 @@ class FinedProductItem extends Component {
                                     classes.addButton,
                                     classes.addButtonGallery,
                                     showAddBtn ? classes.addButton : classes.hidden
-                            )}
+                                )}
                             aria-label="Choose!"
                             onClick={() => chooseProductPart('images', images)}
                         >
@@ -134,7 +156,7 @@ class FinedProductItem extends Component {
                                 classNames(
                                     classes.addButton,
                                     showAddBtn ? classes.addButton : classes.hidden
-                            )}
+                                )}
                             aria-label="Choose!"
                             onClick={() => chooseProductPart('category', category)}
                         >
@@ -149,8 +171,8 @@ class FinedProductItem extends Component {
                             Описание:
                         </Typography>
 
-                        <div hidden={!description}>
-                            <Typography dangerouslySetInnerHTML={{__html: description}}>
+                        <div hidden={!description.html}>
+                            <Typography dangerouslySetInnerHTML={{__html: description.html}}>
 
                             </Typography>
                             <IconButton
@@ -158,7 +180,7 @@ class FinedProductItem extends Component {
                                     classNames(
                                         classes.addButton,
                                         showAddBtn ? classes.addButton : classes.hidden
-                                )}
+                                    )}
                                 aria-label="Choose!"
                                 onClick={() => chooseProductPart('description', description)}
                             >
@@ -167,7 +189,7 @@ class FinedProductItem extends Component {
                                 </Icon>
                             </IconButton>
                         </div>
-                        <div hidden={description}>
+                        <div hidden={description.html}>
                             <Typography>Пусто</Typography>
                         </div>
                     </div>
@@ -183,7 +205,7 @@ class FinedProductItem extends Component {
                                     classNames(
                                         classes.addButton,
                                         showAddBtn ? classes.addButton : classes.hidden
-                                )}
+                                    )}
                                 aria-label="Choose!"
                                 onClick={() => chooseProductPart('properties', properties)}
                             >
@@ -219,8 +241,8 @@ class FinedProductItem extends Component {
                                     classes.addButton,
                                     showAddBtn ? classes.addButton : classes.hidden
                                 )}
-                                aria-label="Choose!"
-                                onClick={() => chooseProductPart('keywords', keywords)}
+                                        aria-label="Choose!"
+                                        onClick={() => chooseProductPart('keywords', keywords)}
                             >
                                 <Icon className="material-icons">
                                     add_circle

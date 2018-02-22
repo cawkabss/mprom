@@ -51,7 +51,7 @@ const DataTableBody = props => {
                                         <TableCell padding="checkbox">
                                             <Checkbox
                                                 onClick={selectHandler(product)}
-                                                checked={isSelected}/>
+                                                checked={isSelected(product)}/>
                                         </TableCell>
                                     )
                             }

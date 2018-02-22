@@ -10,8 +10,9 @@ import classNames from 'classnames';
 
 import DateRange from "./DateRange";
 import Selects from "./Selects";
-import {loadProvidersList} from "../../../../store/actions/providers/actions";
-import {getOrdersList} from "../../../../store/actions/orders/actions";
+import {loadProvidersList} from "../../../../AC/providers";
+import {getOrdersList} from "../../../../AC/orders";
+import {providersListSelector} from "../../../../selectors/providersSelector";
 
 const styles = theme => (
     {
@@ -64,7 +65,7 @@ class Filter extends Component {
     };
 
     componentDidMount() {
-        if (!this.props.providersList.length) {
+        if (!this.props.providersLoaded) {
             this.props.loadProvidersList();
         }
 
@@ -139,7 +140,8 @@ class Filter extends Component {
 
 const mapStateToProps = state => {
     return {
-        providersList: state.providers.providersList
+        providersList: providersListSelector(state),
+        providersLoaded: state.providers.list.loaded
     }
 };
 

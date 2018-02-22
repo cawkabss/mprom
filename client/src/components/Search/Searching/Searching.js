@@ -4,7 +4,7 @@ import {withStyles, Paper, TextField, Button} from "material-ui-next";
 
 import FinedProductsList from '../FinedProductsList/FinedProductList';
 import Progress from "../../../UI/Progress/Progress";
-import {search, searchingClearState} from "../../../store/actions/search/actions";
+import {changeSearchingSettings, search, searchingClearState} from "../../../AC/search";
 
 const styles = theme => (
     {
@@ -45,20 +45,17 @@ const styles = theme => (
 
 class Searching extends Component {
 
-    state = {
-        query: '',
-        maxCount: 10,
-        timeOut: 0.5
-    };
-
     componentDidMount() {
         const params = new URLSearchParams(this.props.location.search);
         const query = params.get('query');
-        const maxCount = params.get('maxCount') || this.state.maxCount;
-        const timeOut = params.get('timeOut') || this.state.timeOut;
 
         if (query) {
-            this.setState({query, maxCount, timeOut});
+            const maxCount = params.get('maxCount') || this.props.settings.maxCount;
+            const timeOut = params.get('timeOut') || this.props.settings.timeOut;
+            this.props.changeSearchingSettings('query', query);
+            this.props.changeSearchingSettings('maxCount', maxCount);
+            this.props.changeSearchingSettings('timeOut', timeOut);
+
             this.props.search(query, maxCount, timeOut);
         }
     }
@@ -71,30 +68,22 @@ class Searching extends Component {
         const propName = e.target.name;
         const propValue = e.target.value;
 
-        this.setState({[propName]: propValue});
+        this.props.changeSearchingSettings(propName, propValue);
     };
 
     searchHandler = () => {
 
-        const {query, maxCount, timeOut} = this.state;
+        const {query, maxCount, timeOut} = this.props.settings;
 
         if (query) {
-            this.setState({
-                error: false
-            });
 
             this.props.search(query, maxCount, timeOut);
             this.props.history.push(`/search?query=${query}&maxCount=${maxCount}&timeOut=${timeOut}`);
         }
-        else {
-            this.setState({
-                error: true
-            })
-        }
     };
 
     render() {
-        const {loading, classes} = this.props;
+        const {settings, searching, endSearching, classes} = this.props;
 
         return (
             <section className={classes.root}>
@@ -106,7 +95,7 @@ class Searching extends Component {
                                 name="query"
                                 label="Поиск товаров на prom.ua"
                                 className={classes.item}
-                                value={this.state.query}
+                                value={settings.query}
                                 onChange={this.inputChangeHandler}
                             />
                             <TextField
@@ -114,7 +103,7 @@ class Searching extends Component {
                                 name="maxCount"
                                 label="Количество"
                                 className={classes.item}
-                                value={this.state.maxCount}
+                                value={settings.maxCount}
                                 onChange={this.inputChangeHandler}
                             />
                             <TextField
@@ -122,7 +111,7 @@ class Searching extends Component {
                                 name="timeOut"
                                 label="Задержка (сек)"
                                 className={classes.item}
-                                value={this.state.timeOut}
+                                value={settings.timeOut}
                                 onChange={this.inputChangeHandler}
                             />
                             <Button raised
@@ -137,7 +126,7 @@ class Searching extends Component {
 
                 <FinedProductsList/>
 
-                <Progress show={loading} text={this.props.loadingText}/>
+                <Progress show={searching && !endSearching}/>
             </section>
         );
     }
@@ -145,15 +134,18 @@ class Searching extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        finedProducts: state.search.finedProducts,
-        loading: state.search.loading,
-        error: state.search.error
+        finedProducts: state.search.searching.data,
+        searching: state.search.searching.searching,
+        settings: state.search.searching.settings,
+        endSearching: state.search.searching.endSearching,
+        error: state.search.searching.error
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         search: (query, maxCount, timeOut) => dispatch(search(query, maxCount, timeOut)),
+        changeSearchingSettings: (propName, propValue) => dispatch(changeSearchingSettings(propName, propValue)),
         searchingClearState: () => dispatch(searchingClearState())
     }
 };

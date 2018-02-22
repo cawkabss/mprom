@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import NavLink from "react-router-dom/NavLink";
 import {withRouter} from 'react-router';
 import {connect} from 'react-redux';
@@ -16,7 +16,7 @@ import {red, amber} from 'material-ui-next/colors';
 import classNames from 'classnames';
 
 import Wrapper from "../../../hoc/Wrapper";
-import {deleteProvider} from "../../../store/actions/providers/actions";
+import {deleteProvider} from "../../../AC/providers";
 import {compose, withState} from "recompose";
 
 const styles = theme => (
@@ -57,7 +57,7 @@ const styles = theme => (
 const Controls = props => {
 
     const id = props.match.params.id;
-    const {provider, showDialog, classes} = props;
+    const {statistics, showDialog, classes} = props;
 
     const deleteClickHandler = () => {
         props.toggleDialog(true)
@@ -103,8 +103,8 @@ const Controls = props => {
                 <Button
                     component={NavLink}
                     to={`/search/providers/${id}`}
-                    disabled={!provider.allProductsCount ||
-                    provider.allProductsCount === provider.doneProductsCount}
+                    disabled={!statistics.allProductsCount ||
+                    statistics.allProductsCount === statistics.doneProductsCount}
                     color="primary"
                     className={classes.action}
                 >
@@ -162,7 +162,7 @@ const Controls = props => {
 
 const mapStateToProps = state => (
     {
-        provider: state.provider
+        statistics: state.providers.statistics.data
     }
 );
 

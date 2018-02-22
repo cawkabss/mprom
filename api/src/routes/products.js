@@ -50,6 +50,7 @@ router.get('/findOne', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
 
     Product.findById(req.params.id)
+        .populate('provider')
         .then(product => {
             if (!product) {
                 next(new Error('Товар не найден'));

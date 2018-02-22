@@ -11,7 +11,7 @@ import {
 } from 'material-ui-next';
 
 import Wrapper from "../../../hoc/Wrapper";
-import {search} from '../../../store/actions/search/actions';
+import {search} from '../../../AC/search';
 
 const styles = {
     root: {
@@ -47,7 +47,7 @@ class Captcha extends Component {
             localStorage.setItem('cookie', this.state.cookie);
 
             const {parseQuery, maxCount} = this.props.settings;
-            const query = this.props.result[parseQuery];
+            const query = this.props.parsedProduct[parseQuery];
 
             this.props.search(query, maxCount);
             this.props.history.goBack();
@@ -149,7 +149,7 @@ class Captcha extends Component {
                     </Step>
                 </Stepper>
                 <div style={styles.content}>
-                    <p>{this.getStepContent(stepIndex)}</p>
+                    {this.getStepContent(stepIndex)}
                     <div style={{marginTop: 12}}>
                         <Button
                             disabled={stepIndex === 0}
@@ -174,8 +174,8 @@ class Captcha extends Component {
 
 const mapStateToProps = state => (
     {
-        settings: state.search.settings,
-        result: state.search.resultProduct
+        settings: state.search.searching.settings,
+        parsedProduct: state.search.parsing.parsedProduct
     }
 );
 

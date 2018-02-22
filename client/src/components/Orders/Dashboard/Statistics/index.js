@@ -9,7 +9,9 @@ import {
 import InfoCard from "../../../../UI/InfoCard/InfoCard";
 import OrdersByMonth from "./OrdersByMonth";
 import OrdersByYear from "./OrdersByYear";
-import {getOrdersStatistics} from "../../../../store/actions/orders/actions";
+import {getOrdersStatistics} from "../../../../AC/orders";
+import {detailStatisticsSelector} from "../../../../selectors/ordersSelectors";
+import Progress from "../../../../UI/Progress/Progress";
 
 
 const styles = {
@@ -27,54 +29,44 @@ class Statistics extends Component {
     }
 
     render() {
-        const {classes, filteredOrders, ordersByLastYear, ordersByLastMonth} = this.props;
-
-        const allOrdersCount = filteredOrders.length;
-        const doneOrders = filteredOrders.filter(order => order.status === 'Выполнен');
-        const doneOrdersCount = doneOrders.length;
-        const waitingProfit = filteredOrders.map(order => order.product.price.markup)
-            .reduce((prev, next) => prev + next, 0);
-        const profit = doneOrders.map(order => order.product.price.markup)
-            .reduce((prev, next) => prev + next, 0);
-        const turn = doneOrders.map(order => order.product.price.ourPrice)
-            .reduce((prev, next) => prev + next, 0);
+        const {classes, detailStatistics, ordersByLastYear, ordersByLastMonth, loading} = this.props;
 
         const infoCardsData = [
             {
                 icon: 'access_time',
                 color: orange[600],
                 title: "Ожидаемая",
-                value: `${waitingProfit} грн.`
+                value: `${detailStatistics.waitingProfit} грн.`
             },
             {
                 icon: 'done_all',
                 color: cyan[600],
                 title: "Фактическая",
-                value: `${profit} грн.`
+                value: `${detailStatistics.profit} грн.`
             },
             {
                 icon: 'attach_money',
                 color: purple[600],
                 title: "Оборот",
-                value: `${turn} грн.`
+                value: `${detailStatistics.turn} грн.`
             },
             {
                 icon: 'shopping_cart',
                 color: indigo[600],
                 title: "Всех заказов",
-                value: allOrdersCount
+                value: detailStatistics.allOrdersCount
             },
             {
                 icon: 'add_shopping_cart',
                 color: green[600],
                 title: "Подтвержденных",
-                value: doneOrdersCount
+                value: detailStatistics.doneOrdersCount
             },
             {
                 icon: 'remove_shopping_cart',
                 color: pink[600],
                 title: "Не подтвержденных",
-                value: allOrdersCount - doneOrdersCount
+                value: detailStatistics.unfinished
             }
         ];
 
@@ -110,6 +102,7 @@ class Statistics extends Component {
                         ))
                     }
                 </Grid>
+                <Progress show={loading} />
             </Paper>
         )
     }
@@ -117,9 +110,10 @@ class Statistics extends Component {
 
 const mapStateToProps = state => {
     return {
-        filteredOrders: state.orders.filteredOrders,
-        ordersByLastYear: state.orders.ordersByLastYear,
-        ordersByLastMonth: state.orders.ordersByLastMonth,
+        detailStatistics: detailStatisticsSelector(state),
+        ordersByLastYear: state.orders.statistics.ordersByLastYear,
+        ordersByLastMonth: state.orders.statistics.ordersByLastMonth,
+        loading: state.orders.statistics.loading
     }
 };
 

@@ -8,22 +8,18 @@ import {
     Button,
     Paper,
     Typography,
-    withStyles,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions
+    withStyles
 } from 'material-ui-next';
 
 import Wrapper from "../../../hoc/Wrapper";
 import DataTable from "../../../UI/DataTable/DataTable";
 import Progress from "../../../UI/Progress/Progress";
 import {
-    loadProvider,
     parsePriceFile,
     updateProviderProducts,
-    confirmError
-} from "../../../store/actions/providers/actions";
+    confirmErrorHandler
+} from "../../../AC/providers";
+import withErrorHandler from "../../../hoc/WithErrorHandler";
 
 const TABLE_COLUMNS = [
     {
@@ -35,12 +31,16 @@ const TABLE_COLUMNS = [
         label: 'Артикул'
     },
     {
+        key: 'description',
+        label: 'Описание',
+    },
+    {
         key: 'providerPrice',
-        label: 'Оптовая цена',
+        label: 'Опт. цена',
     },
     {
         key: 'recommendedPrice',
-        label: 'Рекомендованная цена',
+        label: 'Рек. цена',
     },
     {
         key: 'count',
@@ -93,22 +93,10 @@ class PriceManager extends Component {
         finished: false,
     };
 
-    componentDidMount() {
-        const id = this.props.match.params.id;
-
-        this.props.loadProvider(id);
-    }
-
     setProviderPriceFile = (event) => {
         this.setState({
             priceFile: event.target.files[0]
         })
-    };
-
-    updateProviderHandler = () => {
-        const id = this.props.match.params.id;
-
-        this.props.updateProvider(id);
     };
 
     handleNext = () => {
@@ -117,7 +105,7 @@ class PriceManager extends Component {
         if (stepIndex === 0) {
             this.props.parsePriceFile(this.state.priceFile)
                 .then(() => {
-                    if (!this.props.provider.error) {
+                    if (!this.props.error) {
                         this.setState({
                             stepIndex: stepIndex + 1,
                             finished: true
@@ -138,16 +126,8 @@ class PriceManager extends Component {
         }
     };
 
-    getStepContent(stepIndex) {
-
-        const {
-            provider: {
-                data: {settings},
-                parsedProducts
-            },
-            classes
-        } = this.props;
-        const priceFile = this.state.priceFile;
+    getAvailableSettingsList = () => {
+        const settings = this.props.settings;
 
         const transformedSettings = [];
 
@@ -189,7 +169,7 @@ class PriceManager extends Component {
                         });
                         break;
 
-                    case 'countsCell':
+                    case 'countCell':
                         transformedSettings.push({
                             key: 'Колонка с остатками',
                             value: settings[key]
@@ -199,6 +179,24 @@ class PriceManager extends Component {
                 }
             }
         }
+        return (
+            <ul>
+                {
+                    transformedSettings.map(item => (
+                        <li key={item.value}>{`${item.key}: ${item.value}`}</li>
+                    ))
+                }
+            </ul>
+        );
+    };
+
+    getStepContent(stepIndex) {
+
+        const {
+            parsedProducts,
+            classes
+        } = this.props;
+        const priceFile = this.state.priceFile;
 
         switch (stepIndex) {
             case 0:
@@ -210,15 +208,7 @@ class PriceManager extends Component {
                         <Typography className={classes.marginBottom}>
                             *Вы можете изменить конфигурацию во вкладке "Изменить"
                         </Typography>
-                        <ul>
-                            {
-                                transformedSettings.map((item, i) => (
-                                    <li key={i} className={classes.settingsItem}>
-                                        {`${item.key}: ${item.value}`}
-                                    </li>
-                                ))
-                            }
-                        </ul>
+                        { this.getAvailableSettingsList() }
                         <Button
                             raised
                             className={classes.marginBottom}
@@ -233,6 +223,7 @@ class PriceManager extends Component {
                         <p>{priceFile ? priceFile.name : 'Файл не загружен'}</p>
                     </Wrapper>
                 );
+
             case 1:
 
                 const transformedProducts = parsedProducts.map((product) => {
@@ -240,6 +231,9 @@ class PriceManager extends Component {
                         title: product.title,
                         vendorCode: product.vendorCode,
                         providerPrice: product.price.providerPrice,
+                        description: product.description.text.length > 70 ?
+                            `${product.description.text.slice(0, 70)}...` :
+                            product.description.text,
                         recommendedPrice: product.price.recommendedPrice,
                         count: product.count
                     }
@@ -270,7 +264,7 @@ class PriceManager extends Component {
 
     render() {
         const {stepIndex, priceFile} = this.state;
-        const {provider: {loading, error}, classes} = this.props;
+        const {loading, classes} = this.props;
 
         let canNext = true;
 
@@ -311,26 +305,6 @@ class PriceManager extends Component {
                     </div>
                 </Paper>
 
-                <Dialog
-                    open={!!error}
-                    onBackdropClick={this.props.confirmError}
-                >
-                    <DialogTitle>Ошибка!</DialogTitle>
-                    <DialogContent>
-                        <Typography>
-                            {error && error.response ? error.response.data : error ? error.message : null}
-                        </Typography>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button
-                            color="secondary"
-                            onClick={this.props.confirmError}
-                        >
-                            Ok
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-
                 <Progress show={loading}/>
             </div>
         );
@@ -338,22 +312,27 @@ class PriceManager extends Component {
 }
 
 const mapStateToProps = state => {
+    const providerForm = state.providers.form;
+
     return {
-        provider: state.provider
+        settings: providerForm.data.settings,
+        parsedProducts: providerForm.parsedProducts,
+        loading: providerForm.loading,
+        error: providerForm.error,
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadProvider: (id) => dispatch(loadProvider(id)),
         parsePriceFile: (priceFile) => dispatch(parsePriceFile(priceFile)),
-        confirmError: () => dispatch(confirmError()),
+        confirmErrorHandler: () => dispatch(confirmErrorHandler()),
         updateProviderProducts: () => dispatch(updateProviderProducts())
     }
 };
 
 const enhance = compose(
     connect(mapStateToProps, mapDispatchToProps),
+    withErrorHandler,
     withStyles(styles)
 );
 

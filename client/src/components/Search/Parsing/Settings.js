@@ -15,7 +15,7 @@ import {
 import {grey} from 'material-ui-next/colors';
 import classNames from 'classnames';
 
-import {changeSearchingSettings, search} from "../../../store/actions/search/actions";
+import {changeSearchingSettings, search} from "../../../AC/search";
 
 const styles = theme => (
     {
@@ -157,8 +157,8 @@ class Settings extends Component {
 
 const mapStateToProps = state => (
     {
-        resultProduct: state.search.resultProduct,
-        settings: state.search.settings
+        resultProduct: state.search.parsing.parsedProduct,
+        settings: state.search.searching.settings
     }
 );
 

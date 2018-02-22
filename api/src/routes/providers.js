@@ -77,7 +77,7 @@ router.get('/:id/products', (req, res, next) => {
 
 });
 
-router.get('/:id/products/statistics', (req, res, next) => {
+router.get('/:id/statistics', (req, res, next) => {
     const providerId = req.params.id;
 
     Promise.all([
@@ -91,7 +91,15 @@ router.get('/:id/products/statistics', (req, res, next) => {
             available: '-'
         })
     ])
-        .then(result => res.send(result))
+        .then(result => {
+            const data = {
+                allProductsCount: result[0],
+                doneProductsCount: result[1],
+                unAvailableProductsCount: result[2]
+            };
+
+            res.send(data);
+        })
         .catch(err => next(err));
 });
 

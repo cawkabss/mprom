@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {Paper, Button, withStyles, TextField} from "material-ui-next";
 import classNames from 'classnames';
 
-import {loadProductsList} from "../../store/actions/products/actions";
+import {loadProductsList} from "../../AC/products";
 import {compose} from "recompose";
 
 const styles = {
@@ -57,13 +57,9 @@ class Filter extends Component {
 
             this.props.loadProductsList(query);
             this.props.history.push(`/products?find=${query}`);
-            this.setState({
-                error: false
-            });
+            this.setState({error: false});
         } else {
-            this.setState({
-                error: true
-            })
+            this.setState({error: true})
         }
     };
 
@@ -95,21 +91,15 @@ class Filter extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        productsList: state.products.productsList
-    }
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
+const mapDispatchToProps = dispatch => (
+    {
         loadProductsList: (query) => dispatch(loadProductsList(query))
     }
-};
+);
 
 const enhance = compose(
     withRouter,
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(null, mapDispatchToProps),
     withStyles(styles)
 );
 

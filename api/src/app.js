@@ -5,12 +5,14 @@ import bodyParser from 'body-parser';
 import busboy from 'connect-busboy';
 import path from 'path';
 
+
 import providers from './routes/providers';
 import products from './routes/products';
 import parsePrice from './routes/parsePrice';
 import search from './routes/search';
 import orders from './routes/orders';
 import shops from './routes/shops';
+import instagram from "./routes/instagram";
 
 const app = express();
 
@@ -26,6 +28,7 @@ app.use('/api/parse-price-file', parsePrice);
 app.use('/api/search', search);
 app.use('/api/orders', orders);
 app.use('/api/shops', shops);
+app.use('/Instagram', instagram);
 
 if (process.env.NODE_ENV ? process.env.NODE_ENV.trim() === 'production' : false) {
 
@@ -40,7 +43,6 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   // render the error page
-
     res.status(500);
     res.end(err.message);
 });

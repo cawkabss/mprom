@@ -12,7 +12,7 @@ import Filter from "./Filter";
 import Statistics from './Statistics'
 import OrdersTable from "./OrdersTable";
 import Progress from "../../../UI/Progress/Progress";
-import {clearOrdersList, confirmErrorHandler} from "../../../store/actions/orders/actions";
+import {clearOrdersList, confirmErrorHandler} from "../../../AC/orders";
 import {withState} from "recompose";
 import withErrorHandler from "../../../hoc/WithErrorHandler";
 
@@ -33,7 +33,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        const {filteredOrders, showStatistics, toggleStatistics, loading, classes} = this.props;
+        const {showStatistics, toggleStatistics, loading, classes} = this.props;
 
         return (
             <section className={classes.root}>
@@ -53,9 +53,8 @@ class Dashboard extends Component {
                         <Statistics/>
                     </Collapse>
                 </div>
-                <OrdersTable
-                    orders={filteredOrders}
-                />
+                <OrdersTable/>
+
                 <Progress show={loading}/>
             </section>
         )
@@ -65,9 +64,8 @@ class Dashboard extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        filteredOrders: state.orders.filteredOrders,
-        loading: state.orders.loading,
-        error: state.orders.error
+        loading: state.orders.list.loading,
+        error: state.orders.list.error
     }
 };
 

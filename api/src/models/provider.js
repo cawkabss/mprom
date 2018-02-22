@@ -50,6 +50,10 @@ const schema = new Schema({
         }
     },
 
+    priceRange: {
+        type: Array
+    },
+
     categories: {
         type: Array,
         default: []

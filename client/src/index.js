@@ -5,7 +5,6 @@ import {ConnectedRouter} from 'react-router-redux'
 import registerServiceWorker from './registerServiceWorker';
 
 import App from './App';
-import './index.css';
 import store from './store';
 import history from './history';
 import injectTapEventPlugin from 'react-tap-event-plugin';

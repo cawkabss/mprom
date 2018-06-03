@@ -23,12 +23,12 @@ const readExcel = (file, options, priceRange) => {
                     parseInt(row.getCell(options.countCell).value) : '';
                 const recommendedPrice = options.recommendedPriceCell ?
                     Math.ceil(row.getCell(options.recommendedPriceCell).value) : '';
-
-                if (isNaN(price) || isNaN(recommendedPrice) || isNaN(count)) {
-                    throw new Error(`Товар - ${vendorCode}.
-                        Значения в ячейках с ценой, рекомендованной ценой и остатками должны быть числами! Исправьте значения в файле или измените конфигурацию прайс-листа в разделе "Изменить".
-                    `);
-                }
+                //
+                // if (isNaN(price) || isNaN(recommendedPrice) || isNaN(count)) {
+                //     throw new Error(`Товар - ${vendorCode}.
+                //         Значения в ячейках с ценой, рекомендованной ценой и остатками должны быть числами! Исправьте значения в файле или измените конфигурацию прайс-листа в разделе "Изменить".
+                //     `);
+                // }
 
                 if (vendorCode && title && price) {
 

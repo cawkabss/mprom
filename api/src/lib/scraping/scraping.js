@@ -11,15 +11,28 @@ export const getPage = (url, cookie) => {
 
     return new Promise((resolve, reject) => {
         needle.get(url, options, (err, res) => {
-            if (err) throw err;
-            resolve(cheerio.load(res.body))
+            //if (err) throw err;
+            //console.log(url);
+            if (err) {
+                console.log('errr1', url);
+                needle.get(url, options, (err, res) => {
+                    if (err) console.log('errr2', url);
+
+
+                    resolve(cheerio.load(res.body))
+                });
+            }
+            else {
+                resolve(cheerio.load(res.body))
+            }
+
         });
     });
 };
 
 export const getProductsUrl = ($) => {
     let urls = [];
-    let ProductsList = $('.x-catalog__gallery .x-gallery-tile__content > a.x-gallery-tile__img.x-image-holder');
+    let ProductsList = $('.x-catalog-gallery__list .x-gallery-tile__content > a.x-gallery-tile__image-holder.x-image-holder');
     ProductsList.each((i, e) => {
         urls.push($(e).attr('href'));
     });
